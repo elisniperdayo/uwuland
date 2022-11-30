@@ -1,0 +1,47 @@
+name: uwuland
+version: '${project.version}'
+main: me.aehz.parkourspeedrun.Uwuland
+api-version: 1.19
+prefix: uwu
+
+commands:
+  toggle_shuffle:
+    description: Enable or disable random shuffling
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  uwu:
+    description: Say uwu
+    usage: /<command>
+    permission: Uwuland.basic
+    permission-message: Get owned.
+  world:
+    description: Teleport to a different world
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  initialize_database_world:
+    description: Create DB
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  remote:
+    description: Dispatch command from server
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  event:
+    description: Toggle specific event listeners
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  settings:
+    description: Toggle specific event listeners
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
+  new_world:
+    description: Toggle specific event listeners
+    usage: /<command>
+    permission: Uwuland.op
+    permission-message: Get owned.
