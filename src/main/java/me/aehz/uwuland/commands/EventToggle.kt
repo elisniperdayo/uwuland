@@ -1,7 +1,7 @@
 package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.managers.EventListenerManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

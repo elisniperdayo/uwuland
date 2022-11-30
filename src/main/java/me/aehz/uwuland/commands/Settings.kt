@@ -1,8 +1,8 @@
 package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.util.CustomListener
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.managers.EventListenerManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -50,7 +50,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
         return true
     }
 
-    private fun getFormattedAvailableSettings(listener: CustomListener): String {
+    private fun getFormattedAvailableSettings(listener: PerkListener): String {
         var availableSettings = ""
         listener.stg.forEach {
             availableSettings += "\n${it.key}: ${it.value}"

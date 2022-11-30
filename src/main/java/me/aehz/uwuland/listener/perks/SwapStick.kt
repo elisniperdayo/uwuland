@@ -1,23 +1,24 @@
-package me.aehz.uwuland.listener
+package me.aehz.uwuland.listener.perks
 
 import io.papermc.paper.event.player.PlayerArmSwingEvent
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.util.CustomListener
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.managers.EventListenerManager
+import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.util.swapEntities
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
 
-class SwapStick(private val plugin: Uwuland, override var isEnabled: Boolean) : CustomListener {
+class SwapStick(private val plugin: Uwuland, override var isEnabled: Boolean) : PerkListener {
     override var stg = mutableMapOf<String, String>()
 
     init {
         stg["material"] = "STICK"
         stg["maxDistance"] = "100"
         Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventListenerManager.register(this)
+        EventListenerManager.register(this, ListenerType.GROUP_PERK)
     }
 
     @EventHandler

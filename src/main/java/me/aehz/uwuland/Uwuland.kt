@@ -2,6 +2,14 @@ package me.aehz.uwuland
 
 import me.aehz.uwuland.commands.*
 import me.aehz.uwuland.listener.*
+import me.aehz.uwuland.listener.global_events.Beta
+import me.aehz.uwuland.listener.global_events.ExplosiveArrows
+import me.aehz.uwuland.listener.global_events.PlayerJoinGreeting
+import me.aehz.uwuland.listener.global_events.RandomFallDamage
+import me.aehz.uwuland.listener.group_perks.BindDamage
+import me.aehz.uwuland.listener.perks.BunnyJump
+import me.aehz.uwuland.listener.perks.NarutoSwap
+import me.aehz.uwuland.listener.perks.SwapStick
 import org.bukkit.WorldCreator
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -13,13 +21,11 @@ class Uwuland : JavaPlugin() {
 
         File("./worlds.txt").forEachLine { name -> WorldCreator(name).createWorld() }
         //Event listeners
-        Beta(this, false)
         ProtectDBBlock(this)
-        PlayerJoinGreeting(this, true)
         //BINDS NEEDS TO BE STORED IN A DATABASE
 
 
-        //PLAYER EVENTS (manage perks inside of EventManager)
+        //PEKRS (manage perks inside EventManager)
         NarutoSwap(this, false)
         // ?: Thunder all nearby entities. (item or class??)
         // Drunk Spectre: Upside down. Flying. Slowed.
@@ -33,6 +39,7 @@ class Uwuland : JavaPlugin() {
         // Short fuse: explode every 30? seconds. Immune to explosion damage (dont destroy chests if possible)
         // Phoenix: On death => slowly
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
+        SwapStick(this, true)
 
         //GROUP EVENTS
         BindDamage(this, true)
@@ -41,27 +48,20 @@ class Uwuland : JavaPlugin() {
         // Disorganized: Shuffle inventory on open /
 
         //GLOBAL EVENTS
-        SwapStick(this, true)
-        ExplosiveArrows(this, true)
-        RandomFallDamage(this, true)
-
+        ExplosiveArrows(this, true, true)
+        RandomFallDamage(this, true, true)
+        PlayerJoinGreeting(this, true, true)
+        Beta(this, false, false)
 
         //Commands
         Uwu(this)
         WorldTeleport(this)
         InitializeDBWorld(this)
-        RemoteTest(this)
         EventToggle(this)
         Settings(this)
         CreateWorld(this)
 
-
-        // PLAYER EVENTS (PERK): Affect one entity.
-        // GROUP EVENTS: Affect a group of entities
-        // WORLD EVENTS: Affect every entity
-
-        // GROUP EVENTS: /group_event <global|[teams]> <add|remove> <event>
-        //
+        // GROUP EVENTS: /group_event <[Online_players]|[teams]> <add|remove> <event>
 
         // TIMED EVENTS: Always gets executed after X time.
         // Shuffle example: Store array of [array of players] and shuffle each array
@@ -74,4 +74,6 @@ class Uwuland : JavaPlugin() {
 
     override fun onDisable() {
     }
+
+
 }

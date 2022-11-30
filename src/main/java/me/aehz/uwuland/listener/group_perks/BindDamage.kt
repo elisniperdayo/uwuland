@@ -1,12 +1,13 @@
-package me.aehz.uwuland.listener
+package me.aehz.uwuland.listener.group_perks
 
 import io.papermc.paper.event.player.PlayerArmSwingEvent
 import org.bukkit.entity.Player
 
 import me.aehz.uwuland.Uwuland
 import org.bukkit.Bukkit
-import me.aehz.uwuland.util.CustomListener
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.managers.EventListenerManager
+import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.EntityEffect
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
@@ -18,13 +19,13 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
 
-class BindDamage(private val plugin: Uwuland, override var isEnabled: Boolean) : CustomListener {
+class BindDamage(private val plugin: Uwuland, override var isEnabled: Boolean) : PerkListener {
     override var stg = mutableMapOf<String, String>()
 
     init {
         stg["damageMultiplier"] = "1"
         Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventListenerManager.register(this)
+        EventListenerManager.register(this, ListenerType.GROUP_PERK)
     }
 
     val binds = mutableMapOf<Entity, MutableList<Entity>>()

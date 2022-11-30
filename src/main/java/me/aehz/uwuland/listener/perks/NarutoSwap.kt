@@ -1,21 +1,22 @@
-package me.aehz.uwuland.listener
+package me.aehz.uwuland.listener.perks
 
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.util.CustomListener
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.managers.EventListenerManager
+import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 
-class NarutoSwap(private val plugin: Uwuland, override var isEnabled: Boolean) : CustomListener {
+class NarutoSwap(private val plugin: Uwuland, override var isEnabled: Boolean) : PerkListener {
     override var stg = mutableMapOf<String, String>()
 
     init {
         stg["maxDistance"] = "10"
         Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventListenerManager.register(this)
+        EventListenerManager.register(this, ListenerType.GROUP_PERK)
 
     }
 

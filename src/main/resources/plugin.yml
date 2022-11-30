@@ -1,6 +1,6 @@
 name: uwuland
 version: '${project.version}'
-main: me.aehz.parkourspeedrun.Uwuland
+main: me.aehz.uwuland.Uwuland
 api-version: 1.19
 prefix: uwu
 

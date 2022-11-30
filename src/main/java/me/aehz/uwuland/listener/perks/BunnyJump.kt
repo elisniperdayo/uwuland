@@ -1,9 +1,10 @@
-package me.aehz.uwuland.listener
+package me.aehz.uwuland.listener.perks
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.util.CustomListener
-import me.aehz.uwuland.util.EventListenerManager
+import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.managers.EventListenerManager
+import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Mob
@@ -14,13 +15,13 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class BunnyJump(private val plugin: Uwuland, override var isEnabled: Boolean) : CustomListener {
+class BunnyJump(private val plugin: Uwuland, override var isEnabled: Boolean) : PerkListener {
     override var stg = mutableMapOf<String, String>()
 
     init {
         stg["power"] = "5"
         Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventListenerManager.register(this)
+        EventListenerManager.register(this, ListenerType.GROUP_PERK)
     }
 
     private val crouch = HashMap<String, HashMap<String, Float>>()
