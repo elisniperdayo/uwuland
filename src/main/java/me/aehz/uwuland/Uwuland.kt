@@ -1,6 +1,7 @@
 package me.aehz.uwuland
 
 import me.aehz.uwuland.commands.*
+import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.listener.*
 import me.aehz.uwuland.listener.global_events.Beta
 import me.aehz.uwuland.listener.global_events.ExplosiveArrows
@@ -26,7 +27,7 @@ class Uwuland : JavaPlugin() {
 
 
         //PEKRS (manage perks inside EventManager)
-        NarutoSwap(this, false)
+        NarutoSwap(this, false, ListenerType.PERK, mutableListOf())
         // ?: Thunder all nearby entities. (item or class??)
         // Drunk Spectre: Upside down. Flying. Slowed.
         // Firestarter: Burn all wood in area. Gets fire resistance
@@ -39,19 +40,19 @@ class Uwuland : JavaPlugin() {
         // Short fuse: explode every 30? seconds. Immune to explosion damage (dont destroy chests if possible)
         // Phoenix: On death => slowly
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
-        SwapStick(this, true)
+        SwapStick(this, true, ListenerType.PERK, mutableListOf())
 
         //GROUP EVENTS
-        BindDamage(this, true)
+        BindDamage(this, true, ListenerType.GROUP_PERK, mutableListOf())
         ToggleShuffle(this) // REWORK THIS TO BE TIMED
-        BunnyJump(this, true)
-        // Disorganized: Shuffle inventory on open /
+        BunnyJump(this, true, ListenerType.GROUP_PERK, mutableListOf())
+        // Disorganized: Shuffle inventory on open / on timer
 
         //GLOBAL EVENTS
-        ExplosiveArrows(this, true, true)
-        RandomFallDamage(this, true, true)
-        PlayerJoinGreeting(this, true, true)
-        Beta(this, false, false)
+        ExplosiveArrows(this, true, true, ListenerType.GLOBAL_EVENT, mutableListOf())
+        RandomFallDamage(this, true, false, ListenerType.GLOBAL_EVENT, mutableListOf())
+        PlayerJoinGreeting(this, true, true, ListenerType.GLOBAL_EVENT, mutableListOf())
+        Beta(this, false, false, ListenerType.GLOBAL_EVENT, mutableListOf())
 
         //Commands
         Uwu(this)

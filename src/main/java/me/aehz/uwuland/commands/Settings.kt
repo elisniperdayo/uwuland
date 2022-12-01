@@ -2,7 +2,7 @@ package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.interfaces.PerkListener
-import me.aehz.uwuland.managers.EventListenerManager
+import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -13,7 +13,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
         plugin.getCommand("settings")!!.setExecutor(this)
 
         val listenerOptions = mutableListOf<String>()
-        EventListenerManager.listeners.forEach { listenerOptions.add(it.key) }
+        EventManager.listeners.forEach { listenerOptions.add(it.key) }
 
         plugin.getCommand("settings")!!.tabCompleter =
             MultiTabCompleterBuilder()
@@ -26,7 +26,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (args!!.size < 2) return false
-        val listener = EventListenerManager.get(args[0])
+        val listener = EventManager.get(args[0])
         val method = args[1]
         if (method == "get") {
             sender.sendMessage("Available settings for ${args[0]}:\n${getFormattedAvailableSettings(listener)}")
