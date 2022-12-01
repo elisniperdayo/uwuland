@@ -6,4 +6,5 @@ data class PerkOwner(
     val groupAlias: String, val targets: MutableList<LivingEntity>, val combinedUniqueIdString: String
 ) {
     var taskId: Int = -1
+    var cooldown: Long = System.currentTimeMillis() / 1000
 }
