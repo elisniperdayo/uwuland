@@ -19,4 +19,5 @@ guarantee a positive player experience.
 <h3> Global Event: </h3>
 Global events can safely be applied to all entities.
 
-Global events also include changes to the game that do not require an entity to function (E.g. making wood unbreakable). 
+Global events also include changes to the game that do not require an entity to function (E.g. making wood unbreakable).
+This is also why they are not called perks.
