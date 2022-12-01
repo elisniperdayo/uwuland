@@ -1,5 +1,6 @@
 package me.aehz.uwuland.interfaces
 
+import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener
 import java.util.UUID
 
 interface PerkListener : Listener {
+    val plugin: Uwuland
     val type: ListenerType
     var isEnabled: Boolean
     var stg: MutableMap<String, String>
@@ -28,7 +30,7 @@ interface PerkListener : Listener {
         return true
     }
 
-    private fun setup(targets: MutableList<LivingEntity>): Boolean {
+    fun setup(targets: MutableList<LivingEntity>): Boolean {
         return true
     }
 
@@ -45,6 +47,9 @@ interface PerkListener : Listener {
     }
 
     fun remove(groupAlias: String) {
+        if (this is TimedPerk) {
+            this.stopTask(groupAlias)
+        }
         perkOwners.removeIf { it.groupAlias == groupAlias }
     }
 }

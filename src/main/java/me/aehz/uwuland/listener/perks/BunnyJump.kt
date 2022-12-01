@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class BunnyJump(
-    private val plugin: Uwuland,
+    override val plugin: Uwuland,
     override var isEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner>

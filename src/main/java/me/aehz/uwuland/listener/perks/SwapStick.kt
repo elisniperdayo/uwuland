@@ -13,7 +13,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
 
 class SwapStick(
-    private val plugin: Uwuland,
+    override val plugin: Uwuland,
     override var isEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner>

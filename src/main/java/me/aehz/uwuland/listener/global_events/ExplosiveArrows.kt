@@ -11,7 +11,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 class ExplosiveArrows(
-    private val plugin: Uwuland, override var isEnabled: Boolean,
+    override val plugin: Uwuland,
+    override var isEnabled: Boolean,
     override var isGloballyEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner>

@@ -12,7 +12,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 
 class NarutoSwap(
-    private val plugin: Uwuland,
+    override val plugin: Uwuland,
     override var isEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner>

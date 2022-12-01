@@ -10,7 +10,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 
 class PlayerJoinGreeting(
-    private val plugin: Uwuland, override var isEnabled: Boolean,
+    override val plugin: Uwuland,
+    override var isEnabled: Boolean,
     override var isGloballyEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner>
