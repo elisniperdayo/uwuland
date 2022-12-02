@@ -15,7 +15,7 @@ class NarutoSwap(
     override val plugin: Uwuland,
     override var isEnabled: Boolean,
     override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner>
+    override var perkOwners: MutableList<PerkOwner> = mutableListOf()
 ) :
     PerkListener {
     override var stg = mutableMapOf<String, String>()

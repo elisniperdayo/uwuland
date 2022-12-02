@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import me.aehz.uwuland.interfaces.PerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.enums.ListenerType
+import me.aehz.uwuland.interfaces.GroupPerkListener
 import org.bukkit.EntityEffect
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
@@ -24,9 +25,10 @@ class BindDamage(
     override val plugin: Uwuland,
     override var isEnabled: Boolean,
     override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner>
+    override var perkOwners: MutableList<PerkOwner> = mutableListOf(),
+    override val perkOwnerTeams: MutableList<String> = mutableListOf()
 ) :
-    PerkListener {
+    GroupPerkListener {
     override var stg = mutableMapOf<String, String>()
 
     init {

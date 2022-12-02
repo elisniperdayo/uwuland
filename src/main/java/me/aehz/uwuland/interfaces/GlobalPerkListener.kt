@@ -1,6 +1,6 @@
 package me.aehz.uwuland.interfaces
 
-interface GlobalPerkListener : PerkListener {
+interface GlobalPerkListener : GroupPerkListener {
     var isGloballyEnabled: Boolean
 
     fun enableGlobally() {

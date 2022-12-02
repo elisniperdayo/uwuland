@@ -14,7 +14,8 @@ class PlayerJoinGreeting(
     override var isEnabled: Boolean,
     override var isGloballyEnabled: Boolean,
     override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner>
+    override var perkOwners: MutableList<PerkOwner> = mutableListOf(),
+    override val perkOwnerTeams: MutableList<String> = mutableListOf()
 ) : GlobalPerkListener {
     override var stg = mutableMapOf<String, String>()
 
