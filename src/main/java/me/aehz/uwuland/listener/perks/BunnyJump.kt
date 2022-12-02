@@ -34,7 +34,7 @@ class BunnyJump(
 
     @EventHandler
     fun onCrouch(event: PlayerToggleSneakEvent) {
-        if (!isEnabled) return
+        if (!isEnabled || !hasPerk(event.player)) return
         val p = event.player
         val s = Bukkit.getServer().scheduler
 

@@ -27,6 +27,7 @@ class PlayerJoinGreeting(
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
         if (!isEnabled) return
+        if (!isGloballyEnabled && !hasPerk(e.player)) return
         e.player.sendMessage("${stg["message"]} ${e.player.name}")
     }
 }

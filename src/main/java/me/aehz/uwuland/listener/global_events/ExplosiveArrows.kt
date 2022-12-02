@@ -26,11 +26,12 @@ class ExplosiveArrows(
     }
 
     @EventHandler
-    fun onEntitiyDamage(event: EntityDamageByEntityEvent) {
+    fun onEntitiyDamage(e: EntityDamageByEntityEvent) {
         if (!isEnabled) return
+        if (!isGloballyEnabled && !hasPerk(e.entity)) return
         val power = stg["power"]!!.toFloat()
-        if (event.damager is Arrow) {
-            event.entity.location.createExplosion(power)
+        if (e.damager is Arrow) {
+            e.entity.location.createExplosion(power)
         }
     }
 }
