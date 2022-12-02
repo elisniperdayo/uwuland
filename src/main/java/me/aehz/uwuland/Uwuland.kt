@@ -8,6 +8,7 @@ import me.aehz.uwuland.listener.global_events.ExplosiveArrows
 import me.aehz.uwuland.listener.global_events.PlayerJoinGreeting
 import me.aehz.uwuland.listener.global_events.RandomFallDamage
 import me.aehz.uwuland.listener.group_perks.BindDamage
+import me.aehz.uwuland.listener.group_perks.Shuffle
 import me.aehz.uwuland.listener.perks.BunnyJump
 import me.aehz.uwuland.listener.perks.NarutoSwap
 import me.aehz.uwuland.listener.perks.SwapStick
@@ -41,15 +42,16 @@ class Uwuland : JavaPlugin() {
         // Phoenix: On death => slowly
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         SwapStick(this, true, ListenerType.PERK, mutableListOf())
+        BunnyJump(this, true, ListenerType.PERK, mutableListOf())
 
         //GROUP EVENTS
+        Shuffle(this, true, ListenerType.GROUP_PERK)
         BindDamage(this, true, ListenerType.GROUP_PERK, mutableListOf())
         ToggleShuffle(this) // REWORK THIS TO BE TIMED
-        BunnyJump(this, true, ListenerType.GROUP_PERK, mutableListOf())
         // Disorganized: Shuffle inventory on open / on timer
 
         //GLOBAL EVENTS
-        ExplosiveArrows(this, true, true, ListenerType.GLOBAL_EVENT, mutableListOf())
+        ExplosiveArrows(this, true, false, ListenerType.GLOBAL_EVENT, mutableListOf())
         RandomFallDamage(this, true, false, ListenerType.GLOBAL_EVENT, mutableListOf())
         PlayerJoinGreeting(this, true, true, ListenerType.GLOBAL_EVENT, mutableListOf())
         Beta(this, false, false, ListenerType.GLOBAL_EVENT, mutableListOf())
@@ -61,6 +63,7 @@ class Uwuland : JavaPlugin() {
         EventToggle(this)
         Settings(this)
         CreateWorld(this)
+        Perk(this)
 
         // GROUP EVENTS: /group_event <[Online_players]|[teams]> <add|remove> <event>
 

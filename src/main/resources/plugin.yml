@@ -45,3 +45,8 @@ commands:
     usage: /<command>
     permission: Uwuland.op
     permission-message: Get owned.
+  perk:
+    description: Toggle specific event listeners
+    usage: /<command>
+    permission: Uwuland.basic
+    permission-message: Get owned.
