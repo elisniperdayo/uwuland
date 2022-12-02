@@ -10,7 +10,7 @@ import org.bukkit.util.StringUtil
 
 class MultiTabCompleterBuilder() {
     private val optionsList = mutableListOf<TabCompleterOption>()
-    private var infinitePlayerOptions = false
+    private var infinitePlayerOptions = fun(_: Array<out String>) = false
 
     fun addStringOptions(array: MutableList<String>): MultiTabCompleterBuilder {
         optionsList.add(TabCompleterOption(TabCompleterOptionType.STRING_OPTION, stringOption = array))
@@ -29,8 +29,8 @@ class MultiTabCompleterBuilder() {
         return this
     }
 
-    fun enableInfinitePlayerOptions(): MultiTabCompleterBuilder {
-        infinitePlayerOptions = true
+    fun enableInfinitePlayerOptions(condition: (args: Array<out String>) -> Boolean): MultiTabCompleterBuilder {
+        infinitePlayerOptions = condition
         return this
     }
 
@@ -40,7 +40,7 @@ class MultiTabCompleterBuilder() {
 
     class MultiTabCompleter(
         private val optionsList: MutableList<TabCompleterOption>,
-        private val infinitePlayerOptions: Boolean = false
+        private val infinitePlayerOptions: (Array<out String>) -> Boolean
     ) : TabCompleter {
         override fun onTabComplete(
             sender: CommandSender,
@@ -50,7 +50,7 @@ class MultiTabCompleterBuilder() {
         ): MutableList<String> {
             val i = args.size - 1
 
-            if (i > optionsList.size - 1 && infinitePlayerOptions) {
+            if (i > optionsList.size - 1 && infinitePlayerOptions(args)) {
                 return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
             } else if (i > optionsList.size - 1) return mutableListOf()
 
