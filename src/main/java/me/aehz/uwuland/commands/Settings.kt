@@ -17,10 +17,10 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
 
         plugin.getCommand("settings")!!.tabCompleter =
             MultiTabCompleterBuilder()
-                .addOptions(listenerOptions)
-                .addOptions(mutableListOf("set", "get"))
-                .addOptions(mutableListOf("_Use *get* to see a list of available settings"))
-                .addOptions(mutableListOf("_Use *get* to see a list of available settings"))
+                .addStringOptions(listenerOptions)
+                .addStringOptions(mutableListOf("set", "get"))
+                .addStringOptions(mutableListOf("_Use *get* to see a list of available settings"))
+                .addStringOptions(mutableListOf("_Use *get* to see a list of available settings"))
                 .create()
     }
 

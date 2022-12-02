@@ -8,7 +8,7 @@ import org.bukkit.util.StringUtil
 class MultiTabCompleterBuilder() {
     private val options = mutableListOf<MutableList<String>>()
 
-    fun addOptions(array: MutableList<String>): MultiTabCompleterBuilder {
+    fun addStringOptions(array: MutableList<String>): MultiTabCompleterBuilder {
         this.options.add(array)
         return this
     }

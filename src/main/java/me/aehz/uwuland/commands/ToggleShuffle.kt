@@ -15,7 +15,7 @@ class ToggleShuffle(private val plugin: Uwuland) : CommandExecutor {
     init {
         plugin.getCommand("toggle_shuffle")!!.setExecutor(this)
         plugin.getCommand("toggle_shuffle")!!.tabCompleter = MultiTabCompleterBuilder()
-            .addOptions(mutableListOf("enable", "disable"))
+            .addStringOptions(mutableListOf("enable", "disable"))
             .create()
 
     }

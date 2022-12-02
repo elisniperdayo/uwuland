@@ -17,8 +17,8 @@ class EventToggle(private val plugin: Uwuland) : CommandExecutor {
 
         plugin.getCommand("event")!!.tabCompleter =
             MultiTabCompleterBuilder()
-                .addOptions(mutableListOf("enable", "disable"))
-                .addOptions(listenerOptions)
+                .addStringOptions(mutableListOf("enable", "disable"))
+                .addStringOptions(listenerOptions)
                 .create()
     }
 

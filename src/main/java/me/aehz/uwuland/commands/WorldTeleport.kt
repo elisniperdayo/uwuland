@@ -16,7 +16,7 @@ class WorldTeleport(private val plugin: Uwuland) : CommandExecutor {
         plugin.getCommand("world")!!.setExecutor(this)
         Bukkit.getWorlds().forEach { world -> worldNames.add(world.name) }
         plugin.getCommand("world")!!.tabCompleter =
-            MultiTabCompleterBuilder().addOptions(worldNames).create()
+            MultiTabCompleterBuilder().addStringOptions(worldNames).create()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
