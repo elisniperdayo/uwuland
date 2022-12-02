@@ -24,14 +24,22 @@ class EventToggle(private val plugin: Uwuland) : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (args!!.size < 2) return false
-        if (args[0] == "enable") {
-            sender.sendMessage("Enabled ${args[1]}")
-            EventManager.get(args[1]).enable()
+        val listener = EventManager.get(args[1]) ?: return false
+
+        when (args[0]) {
+            "enable" -> {
+                sender.sendMessage("Enabled ${args[1]}")
+                listener.enable()
+            }
+
+            "disable" -> {
+                sender.sendMessage("Disabled ${args[1]}")
+                listener.disable()
+            }
+
+            else -> return false
         }
-        if (args[0] == "disable") {
-            sender.sendMessage("Disabled ${args[1]}")
-            EventManager.get(args[1]).disable()
-        }
+
         return true
     }
 }

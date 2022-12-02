@@ -26,7 +26,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (args!!.size < 2) return false
-        val listener = EventManager.get(args[0])
+        val listener = EventManager.get(args[0]) ?: return false
         val method = args[1]
         if (method == "get") {
             sender.sendMessage("Available settings for ${args[0]}:\n${getFormattedAvailableSettings(listener)}")

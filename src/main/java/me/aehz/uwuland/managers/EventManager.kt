@@ -15,8 +15,8 @@ object EventManager {
         listeners[alias] = listener
     }
 
-    fun get(alias: String): PerkListener {
-        return listeners[alias]!!
+    fun get(alias: String): PerkListener? {
+        return listeners[alias]
     }
 
     fun getPerksByEntity(entity: Entity): Collection<PerkListener> {
