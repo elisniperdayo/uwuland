@@ -52,6 +52,7 @@ class Perk(private val plugin: Uwuland) : CommandExecutor {
         if (args!!.size < 3) return false
         val p = Bukkit.getPlayer(args[0]) ?: return false
         val listener = EventManager.get(args[2]) ?: return false
+        if (listener.type != ListenerType.PERK) return false
 
         when (args[1]) {
             "add" -> listener.add(p.name, mutableListOf(p))
