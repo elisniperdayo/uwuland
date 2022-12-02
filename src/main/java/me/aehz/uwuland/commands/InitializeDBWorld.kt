@@ -33,10 +33,11 @@ class InitializeDBWorld(private val plugin: Uwuland) : CommandExecutor {
 
         return true
     }
-}
 
-class EmptyChunkGenerator : ChunkGenerator() {
-    override fun generateChunkData(world: World, random: Random, x: Int, z: Int, biome: BiomeGrid): ChunkData {
-        return createChunkData(world)
+    class EmptyChunkGenerator : ChunkGenerator() {
+        override fun generateChunkData(world: World, random: Random, x: Int, z: Int, biome: BiomeGrid): ChunkData {
+            return createChunkData(world)
+        }
     }
 }
+

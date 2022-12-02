@@ -57,7 +57,7 @@ class Uwuland : JavaPlugin() {
         Beta(this, false, false, ListenerType.GLOBAL_EVENT, mutableListOf())
 
         //Commands
-        Uwu(this)
+        Beta(this)
         WorldTeleport(this)
         InitializeDBWorld(this)
         EventToggle(this)
