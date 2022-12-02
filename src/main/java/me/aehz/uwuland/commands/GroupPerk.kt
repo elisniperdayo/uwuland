@@ -23,7 +23,7 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
                     when (it[1]) {
                         "add" -> {
                             val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map { "TEAM:${it.name}" }
-                            val players = Bukkit.getOnlinePlayers().map { it.name }
+                            val players = Bukkit.getOnlinePlayers().map { "PLAYER:${it.name}" }
                             (teams + players).toMutableList()
                         }
 
@@ -65,7 +65,8 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
 
             false -> {
                 val targets =
-                    args.copyOfRange(2, args.size).mapNotNull { Bukkit.getPlayer(it) }.toSet<LivingEntity>()
+                    args.copyOfRange(2, args.size).mapNotNull { Bukkit.getPlayer(it.substringAfterLast(":")) }
+                        .toSet<LivingEntity>()
                 val groupAlias = targets.joinToString("&") { it.name }
 
                 when (args[1]) {
