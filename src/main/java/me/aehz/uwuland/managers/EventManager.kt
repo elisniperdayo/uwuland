@@ -19,13 +19,11 @@ object EventManager {
         return listeners[alias]!!
     }
 
-    fun getPerksByEntity(entity: Entity): Set<String> {
-        val perks = mutableSetOf<String>()
-        listeners.forEach {
-            if (it.value.hasPerk(entity)) {
-                perks.add(it.key)
-            }
-        }
-        return perks
+    fun getPerksByEntity(entity: Entity): Collection<PerkListener> {
+        return listeners.filter { it.value.hasPerk(entity) }.values
+    }
+
+    fun getPerksByName(name: String): Collection<PerkListener> {
+        return listeners.filter { it.value.hasPerkByName(name) }.values
     }
 }

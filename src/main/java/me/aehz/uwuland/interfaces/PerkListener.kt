@@ -6,6 +6,7 @@ import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
 
@@ -15,6 +16,10 @@ interface PerkListener : Listener {
     var isEnabled: Boolean
     var stg: MutableMap<String, String>
     var perkOwners: MutableList<PerkOwner>
+
+    fun getAlias(): String {
+        return this.javaClass.name.substringAfterLast(".")
+    }
 
     fun enable() {
         isEnabled = true
@@ -44,6 +49,10 @@ interface PerkListener : Listener {
 
     fun hasPerk(entity: Entity): Boolean {
         return perkOwners.find { it.targets.contains(entity) } != null
+    }
+
+    fun hasPerkByName(name: String): Boolean {
+        return perkOwners.find { it.targets.any { it.name == name && it is Player } } != null
     }
 
     fun remove(groupAlias: String) {
