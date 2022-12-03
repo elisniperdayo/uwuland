@@ -12,13 +12,17 @@ class EventToggle(private val plugin: Uwuland) : CommandExecutor {
     init {
         plugin.getCommand("event")!!.setExecutor(this)
 
-        val listenerOptions = mutableListOf<String>()
-        EventManager.listeners.forEach { listenerOptions.add(it.key) }
-
         plugin.getCommand("event")!!.tabCompleter =
             MultiTabCompleterBuilder()
                 .addStringOptions(mutableListOf("enable", "disable"))
-                .addStringOptions(listenerOptions)
+                .addFunctionalOptions {
+                    when (it[0]) {
+                        "enable" -> EventManager.listeners.filter { !it.value.isEnabled }.keys.toMutableList()
+                        "disable" -> EventManager.listeners.filter { it.value.isEnabled }.keys.toMutableList()
+                        else -> mutableListOf()
+                    }
+
+                }
                 .create()
     }
 
