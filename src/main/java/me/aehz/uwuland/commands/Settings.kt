@@ -12,15 +12,26 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
     init {
         plugin.getCommand("settings")!!.setExecutor(this)
 
-        val listenerOptions = mutableListOf<String>()
-        EventManager.listeners.forEach { listenerOptions.add(it.key) }
-
         plugin.getCommand("settings")!!.tabCompleter =
             MultiTabCompleterBuilder()
-                .addStringOptions(listenerOptions)
+                .addStringOptions(EventManager.listeners.filter { it.value.stg.isNotEmpty() }.keys.toMutableList())
                 .addStringOptions(mutableListOf("set", "get"))
-                .addStringOptions(mutableListOf("_Use *get* to see a list of available settings"))
-                .addStringOptions(mutableListOf("_Use *get* to see a list of available settings"))
+                .addFunctionalOptions {
+                    when (it[1]) {
+                        "set" -> {
+                            val listener = EventManager.get(it[0])
+                            listener?.stg?.keys?.toMutableList() ?: mutableListOf()
+                        }
+
+                        else -> mutableListOf()
+                    }
+                }
+                .addFunctionalOptions {
+                    when (it[1]) {
+                        "set" -> mutableListOf("§7<Value>")
+                        else -> mutableListOf()
+                    }
+                }
                 .create()
     }
 
@@ -31,20 +42,20 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
         if (method == "get") {
             sender.sendMessage("Available settings for ${args[0]}:\n${getFormattedAvailableSettings(listener)}")
         }
-        if (method == "set" && args!!.size == 4) {
+        if (method == "set" && args.size == 4) {
             val key = args[2]
             val value = args[3]
             val set = listener.setStg(key, value)
             if (!set) {
                 sender.sendMessage(
-                    "§cSetting does not exist. Available settings for ${args[0]}:\n${
+                    "§cSetting does not exist. Available settings for ${listener.getAlias()}:\n${
                         getFormattedAvailableSettings(
                             listener
                         )
                     }"
                 )
             } else {
-                sender.sendMessage("Successfully set ${key} of ${args[0]} to ${value}")
+                sender.sendMessage("Successfully set ${key} of ${listener.getAlias()} to ${value}")
             }
         }
         return true
