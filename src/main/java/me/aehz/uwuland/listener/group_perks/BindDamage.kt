@@ -26,7 +26,6 @@ class BindDamage(
     override var isEnabled: Boolean,
     override val type: ListenerType,
     override var perkOwners: MutableList<PerkOwner> = mutableListOf(),
-    override val perkOwnerTeams: MutableList<String> = mutableListOf()
 ) :
     GroupPerkListener {
     override var stg = mutableMapOf<String, String>()
