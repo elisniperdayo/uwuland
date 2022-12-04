@@ -2,6 +2,7 @@ package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.enums.ListenerType
+import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.interfaces.GroupPerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
@@ -30,9 +31,7 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
                         "remove" -> {
                             val listener = EventManager.get(it[0])
                             if (listener is GroupPerkListener) {
-                                val groups = listener?.perkOwners?.map { it.groupAlias } ?: mutableListOf()
-                                val teams = listener.perkOwnerTeams.map { "TEAM:$it" }
-                                (teams + groups).toMutableList()
+                                listener.perkOwners.map { it.groupAlias }.toMutableList()
                             } else {
                                 mutableListOf()
                             }
@@ -41,7 +40,7 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
                         else -> mutableListOf()
                     }
                 }
-                .enableInfinitePlayerOptions { !it[2].startsWith("TEAM:") }
+                .enableInfinitePlayerOptions { !it[2].startsWith("TEAM:") && it[1] == "add" }
                 .create()
     }
 
@@ -52,29 +51,32 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
 
         when (args[2].startsWith("TEAM:")) {
             true -> {
-                val team = args[2].substringAfterLast(":")
                 when (args[1]) {
                     "add" -> {
-                        listener.addTeam(team)
+                        listener.addTeam(args[2])
                     }
 
-                    "remove" -> listener.removeTeam(team)
+                    "remove" -> listener.remove(args[2])
                     else -> return false
                 }
             }
 
             false -> {
                 val targets =
-                    args.copyOfRange(2, args.size).mapNotNull { Bukkit.getPlayer(it.substringAfterLast(":")) }
+                    args.copyOfRange(2, args.size).mapNotNull { Bukkit.getPlayer(it.substringAfter(":")) }
                         .toSet<LivingEntity>()
-                val groupAlias = targets.joinToString("&") { it.name }
 
                 when (args[1]) {
                     "add" -> {
+                        val groupAlias = targets.joinToString("&") { it.name }
                         listener.add(groupAlias, targets.toMutableList())
                     }
 
-                    "remove" -> listener.remove(groupAlias)
+                    "remove" -> {
+                        val groupAlias = args[2]
+                        listener.remove(groupAlias)
+                    }
+
                     else -> return false
                 }
             }

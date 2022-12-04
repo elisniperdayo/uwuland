@@ -3,6 +3,7 @@ package me.aehz.uwuland.interfaces
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
+import me.aehz.uwuland.enums.PerkOwnerType
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -35,20 +36,22 @@ interface PerkListener : Listener {
         return true
     }
 
-    fun setup(targets: MutableList<LivingEntity>): Boolean {
+    fun setup(owner: PerkOwner): Boolean {
         return true
     }
 
     fun add(groupAlias: String, targets: MutableList<LivingEntity>) {
         val combinedUniqueIdString = targets.map { it.uniqueId }.sorted().toString()
         if (perkOwners.find { it.combinedUniqueIdString == combinedUniqueIdString } != null) return
-        val successfulSetup = setup(targets)
+        val owner = PerkOwner(PerkOwnerType.PLAYER, groupAlias, targets, combinedUniqueIdString)
+        val successfulSetup = setup(owner)
         if (!successfulSetup) return
-        perkOwners.add(PerkOwner(groupAlias, targets, combinedUniqueIdString))
+        perkOwners.add(owner)
     }
 
     fun hasPerk(entity: Entity): Boolean {
-        return perkOwners.find { it.targets.contains(entity) } != null
+        val team = Bukkit.getScoreboardManager().mainScoreboard.getEntityTeam(entity)?.name
+        return perkOwners.find { it.targets.contains(entity) || it.groupAlias == team } != null
     }
 
     fun hasPerkByName(name: String): Boolean {
