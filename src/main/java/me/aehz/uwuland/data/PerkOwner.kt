@@ -11,4 +11,8 @@ data class PerkOwner(
 ) {
     var taskId: Int = -1
     var cooldown: Long = System.currentTimeMillis() / 1000
+
+    fun clean() {
+        this.targets.removeIf { it.isDead }
+    }
 }
