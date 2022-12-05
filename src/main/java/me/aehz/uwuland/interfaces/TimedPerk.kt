@@ -9,7 +9,7 @@ interface TimedPerk : PerkListener {
     fun task(targets: MutableList<LivingEntity>)
     fun startTask(owner: PerkOwner) {
         val targets = if (owner.type == PerkOwnerType.PLAYER) {
-            owner.targets
+            owner.getTargetsAsEntities()
         } else {
             val teamName = owner.groupAlias.substringAfter(":")
             Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull { Bukkit.getPlayer(it) }

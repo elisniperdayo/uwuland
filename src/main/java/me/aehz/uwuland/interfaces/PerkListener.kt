@@ -45,9 +45,10 @@ interface PerkListener : Listener {
     }
 
     fun add(groupAlias: String, targets: MutableList<LivingEntity>) {
-        val combinedUniqueIdString = targets.map { it.uniqueId }.sorted().toString()
+        val uniqueIdList = targets.map { it.uniqueId }.toMutableList()
+        val combinedUniqueIdString = uniqueIdList.sorted().toString()
         if (perkOwners.find { it.combinedUniqueIdString == combinedUniqueIdString } != null) return
-        val owner = PerkOwner(PerkOwnerType.PLAYER, groupAlias, targets, combinedUniqueIdString)
+        val owner = PerkOwner(PerkOwnerType.PLAYER, groupAlias, uniqueIdList, combinedUniqueIdString)
         val successfulSetup = setup(owner)
         if (!successfulSetup) return
         perkOwners.add(owner)
@@ -55,11 +56,11 @@ interface PerkListener : Listener {
 
     fun hasPerk(entity: Entity): Boolean {
         val team = Bukkit.getScoreboardManager().mainScoreboard.getEntityTeam(entity)?.name
-        return perkOwners.find { it.targets.contains(entity) || it.groupAlias == team } != null
+        return perkOwners.find { it.targets.contains(entity.uniqueId) || it.groupAlias == team } != null
     }
 
     fun hasPerkByName(name: String): Boolean {
-        return perkOwners.find { it.targets.any { it.name == name && it is Player } } != null
+        return perkOwners.find { it.getTargetsAsEntities().any { it.name == name && it is Player } } != null
     }
 
     fun remove(groupAlias: String) {
@@ -74,10 +75,9 @@ interface PerkListener : Listener {
     fun getPartners(entity: Entity): List<LivingEntity> {
         val partners = mutableSetOf<LivingEntity>()
         perkOwners.forEach {
-            it.clean()
             when (it.type) {
                 PerkOwnerType.PLAYER -> {
-                    if (it.targets.contains(entity)) partners.addAll(it.targets)
+                    if (it.targets.contains(entity.uniqueId)) partners.addAll(it.getTargetsAsEntities())
                 }
 
                 PerkOwnerType.TEAM -> {
