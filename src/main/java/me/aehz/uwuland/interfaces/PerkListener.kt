@@ -40,6 +40,10 @@ interface PerkListener : Listener {
         return true
     }
 
+    fun unsetup(owner: PerkOwner) {
+        return
+    }
+
     fun add(groupAlias: String, targets: MutableList<LivingEntity>) {
         val combinedUniqueIdString = targets.map { it.uniqueId }.sorted().toString()
         if (perkOwners.find { it.combinedUniqueIdString == combinedUniqueIdString } != null) return
@@ -62,6 +66,8 @@ interface PerkListener : Listener {
         if (this is TimedPerk) {
             this.stopTask(groupAlias)
         }
+        val owner = this.getOwner(groupAlias) ?: return
+        this.unsetup(owner)
         perkOwners.removeIf { it.groupAlias == groupAlias }
     }
 
