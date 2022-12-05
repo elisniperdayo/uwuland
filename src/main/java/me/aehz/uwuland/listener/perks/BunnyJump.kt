@@ -33,12 +33,13 @@ class BunnyJump(
     private val crouch = HashMap<String, HashMap<String, Float>>()
 
     @EventHandler
-    fun onCrouch(event: PlayerToggleSneakEvent) {
-        if (!isEnabled || !hasPerk(event.player)) return
-        val p = event.player
+    fun onCrouch(e: PlayerToggleSneakEvent) {
+        if (!isEnabled) return
+        if (!hasPerk(e.player)) return
+        val p = e.player
         val s = Bukkit.getServer().scheduler
 
-        if (event.isSneaking) {
+        if (e.isSneaking) {
             crouch[p.name] = HashMap<String, Float>()
             crouch[p.name]!!["prevExp"] = p.exp
             crouch[p.name]!!["prevLevel"] = p.level.toFloat()

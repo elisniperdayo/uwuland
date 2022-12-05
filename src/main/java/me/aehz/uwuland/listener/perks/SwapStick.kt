@@ -31,6 +31,7 @@ class SwapStick(
     @EventHandler
     fun onStickClick(e: PlayerArmSwingEvent) {
         if (!isEnabled) return
+        if (!hasPerk(e.player)) return
         val material = Material.matchMaterial(stg["material"]!!)
         val maxDistance = stg["maxDistance"]!!.toInt()
         val p = e.player

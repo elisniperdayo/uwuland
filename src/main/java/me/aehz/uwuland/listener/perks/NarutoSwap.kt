@@ -28,13 +28,14 @@ class NarutoSwap(
     }
 
     @EventHandler
-    fun onPlayerAttack(event: PlayerInteractEvent) {
+    fun onPlayerAttack(e: PlayerInteractEvent) {
         if (!isEnabled) return
+        if (!hasPerk(e.player)) return
         val maxDistance = stg["maxDistance"]!!.toInt()
-        val act = event.action
-        val p = event.player
+        val act = e.action
+        val p = e.player
         if (act == Action.LEFT_CLICK_BLOCK) {
-            val block = event.player.getTargetBlock(maxDistance)
+            val block = e.player.getTargetBlock(maxDistance)
             val block2 = block!!.location.add(0.0, 1.0, 0.0).block
             val playerLocation = p.location
             val targetLocation = block!!.location.add(0.5, 0.0, 0.5)
