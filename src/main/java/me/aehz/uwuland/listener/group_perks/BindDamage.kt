@@ -1,24 +1,26 @@
 package me.aehz.uwuland.listener.group_perks
 
-import io.papermc.paper.event.player.PlayerArmSwingEvent
 import org.bukkit.entity.Player
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
 import org.bukkit.Bukkit
-import me.aehz.uwuland.interfaces.PerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.interfaces.GroupPerkListener
 import org.bukkit.EntityEffect
-import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import kotlin.math.max
+import kotlin.math.min
 
 
 class BindDamage(
@@ -36,30 +38,24 @@ class BindDamage(
         EventManager.register(this, type)
     }
 
-    val binds = mutableMapOf<Entity, MutableList<Entity>>()
-
     @EventHandler
     fun onDamage(e: EntityDamageEvent) {
         if (!isEnabled) return
-        val dmg = e.finalDamage * stg["damageMultiplier"]!!.toFloat()
-        val damageTaker = e.entity
         if (e.damage == 0.0) return
-        if (!binds.containsKey(damageTaker)) return
-        for (partner in binds[damageTaker]!!) {
-            if (partner is LivingEntity && damageTaker is LivingEntity) {
-                partner.playEffect(EntityEffect.HURT)
+        if (!hasPerk(e.entity)) return
+        val damageTaker = e.entity
+        if (damageTaker !is LivingEntity) return
+        val dmg = e.finalDamage * stg["damageMultiplier"]!!.toFloat()
+        val partners = getPartners(damageTaker)
 
-                if (partner.health - dmg < 0.0) {
-                    partner.health = 0.0
-                } else {
-                    partner.health -= dmg
-                }
+        for (partner in partners) {
+            partner.playEffect(EntityEffect.HURT)
+            partner.health = max(partner.health - dmg, 0.0)
 
-                //Unbind if partner was a mob. DamageTaker damage is not calculated at this point
-                if ((partner !is Player && partner.isDead) || (damageTaker !is Player && damageTaker.health <= dmg)) {
-                    unbind(damageTaker, partner)
-                    unbind(partner, damageTaker)
-                }
+            //Unbind if partner was a mob. DamageTaker damage is not calculated at this point
+            if ((partner !is Player && partner.isDead) || (damageTaker !is Player && damageTaker.health <= dmg)) {
+                removeHpModifier(damageTaker, partner)
+                removeHpModifier(partner, damageTaker)
             }
         }
     }
@@ -67,63 +63,68 @@ class BindDamage(
     @EventHandler
     fun onReg(e: EntityRegainHealthEvent) {
         if (!isEnabled) return
-        val healTaker = e.entity
-        if (!binds.containsKey(healTaker)) return
-        for (partner in binds[healTaker]!!) {
-            if (!(partner is LivingEntity && healTaker is LivingEntity)) return
+        if (!hasPerk(e.entity)) return
+        val partners = getPartners(e.entity)
+
+        for (partner in partners) {
             if (partner.health <= 0) return
             val partnerMaxHealth = partner.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
-            if (partnerMaxHealth < partner.health + e.amount) {
-                partner.health = partnerMaxHealth
-            } else {
-                partner.health += e.amount
-            }
+            partner.health = min(partner.health + e.amount, partnerMaxHealth)
         }
     }
 
     @EventHandler
-    fun onHit(e: PlayerArmSwingEvent) {
-        val p = e.player
-        val target = e.player.getTargetEntity(100)
-        if (target !is LivingEntity) return
+    fun onJoin(e: PlayerJoinEvent) {
 
-        if (p.inventory.itemInMainHand.type == Material.BEDROCK) {
-            for (p in Bukkit.getServer().onlinePlayers) {
-                for (mod in p.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.modifiers) {
-                    p.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.removeModifier(mod)
-                }
-            }
-            Bukkit.broadcastMessage("Cleared all bindings")
-            binds.clear()
-        }
+        if (!isEnabled) return
+        if (!hasPerk(e.player)) return
 
-        if (p.inventory.itemInMainHand.type != Material.OBSIDIAN || target !is LivingEntity) return
-        bindList(mutableListOf(p, target))
-    }
+        val partners = getPartners(e.player)
+        Bukkit.getLogger().info("$partners")
 
-    private fun bindList(list: MutableList<Entity>) {
-        for (e1 in list) {
-            for (e2 in list) {
-                if (e1 != e2) {
-                    bindEntities(e1, e2)
-                }
-            }
+        for (partner in partners) {
+            addHpModifier(e.player, partner)
+            addHpModifier(partner, e.player)
         }
     }
 
-    private fun bindEntities(e1: Entity, e2: Entity) {
-        if (binds.containsKey(e1)) {
-            binds[e1]!!.add(e2)
-        } else {
-            binds[e1] = mutableListOf(e2)
+    @EventHandler
+    fun onLeave(e: PlayerQuitEvent) {
+        if (!isEnabled) return
+        if (!hasPerk(e.player)) return
+        val partners = getPartners(e.player)
+        for (partner in partners) {
+            removeHpModifier(e.player, partner)
+            removeHpModifier(partner, e.player)
         }
+    }
 
+    override fun setup(owner: PerkOwner): Boolean {
+        val targets = owner.getTargetsAsEntities()
+        targets.forEach { e1 ->
+            targets.forEach { e2 ->
+                if (e1 != e2) addHpModifier(e1, e2)
+            }
+        }
+        return true
+    }
+
+    override fun unsetup(owner: PerkOwner) {
+        val targets = owner.getTargetsAsEntities()
+        targets.forEach { e1 ->
+            targets.forEach { e2 ->
+                if (e1 != e2) removeHpModifier(e1, e2)
+            }
+        }
+    }
+
+    private fun addHpModifier(e1: Entity, e2: Entity) {
         if (e1 is LivingEntity && e2 is LivingEntity) {
             val e2HP = e2.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue
             e1.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.addModifier(
                 AttributeModifier(
                     e2.uniqueId,
-                    "bind hp modifier",
+                    "BIND",
                     e2HP,
                     AttributeModifier.Operation.ADD_NUMBER
                 )
@@ -131,14 +132,8 @@ class BindDamage(
         }
     }
 
-    fun unbind(e1: Entity, e2: Entity) {
-        if (!binds.containsKey(e1)) return
-        if (binds[e1]!!.size == 1) {
-            binds.remove(e1)
-        } else {
-            binds[e1]!!.remove(e2)
-        }
-        if (e1 is LivingEntity && e2 is LivingEntity) {
+    private fun removeHpModifier(e1: Entity, e2: Entity) {
+        if (e1 is LivingEntity) {
             val modifier =
                 e1.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.modifiers.filter { it.uniqueId == e2.uniqueId }[0]
             e1.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.removeModifier(modifier)
