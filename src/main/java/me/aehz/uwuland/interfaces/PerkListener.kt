@@ -64,4 +64,35 @@ interface PerkListener : Listener {
         }
         perkOwners.removeIf { it.groupAlias == groupAlias }
     }
+
+    fun getPartners(entity: Entity): List<LivingEntity> {
+        val partners = mutableSetOf<LivingEntity>()
+        perkOwners.forEach {
+            it.clean()
+            when (it.type) {
+                PerkOwnerType.PLAYER -> {
+                    if (it.targets.contains(entity)) partners.addAll(it.targets)
+                }
+
+                PerkOwnerType.TEAM -> {
+                    val players = Bukkit
+                        .getScoreboardManager()
+                        .mainScoreboard
+                        .getTeam(it.groupAlias)
+                        ?.entries
+                        ?.mapNotNull {
+                            Bukkit.getPlayer(
+                                it
+                            )
+                        }?.toSet<LivingEntity>() ?: setOf()
+                    partners.addAll(players)
+                }
+            }
+        }
+        return partners.filter { it != entity }
+    }
+
+    fun getOwner(groupAlias: String): PerkOwner? {
+        return perkOwners.find { it.groupAlias == groupAlias }
+    }
 }
