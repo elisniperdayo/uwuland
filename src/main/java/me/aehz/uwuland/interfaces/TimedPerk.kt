@@ -17,7 +17,7 @@ interface TimedPerk : PerkListener {
         }
         val delay = (stg["min"]!!.toInt()..stg["max"]!!.toInt()).random().toLong()
         owner.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, Runnable {
-            task(targets)
+            if (this.isEnabled) task(targets)
             startTask(owner)
         }, delay)
     }
