@@ -6,12 +6,9 @@ import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.interfaces.PerkListener
 import me.aehz.uwuland.interfaces.TimedPerk
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.util.getAdjacent
-import me.aehz.uwuland.util.getRadius
+import me.aehz.uwuland.util.BlockUtil
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
@@ -43,14 +40,15 @@ class Firestarter(
     override fun task(targets: MutableList<LivingEntity>) {
         val perkEntity = targets[0]
         val range = stg["range"]!!.toDouble()
-        val burnableBlocks = getRadius(perkEntity.location, range).filter { it.isBurnable }
+        val burnableBlocks = BlockUtil.getRadiusSolid(perkEntity.location.block, range).filter { it.isBurnable }
 
         if (burnableBlocks.isEmpty()) return
 
         Bukkit.getLogger().info("BURNING")
         val burnableAir =
             burnableBlocks.mapNotNull { block ->
-                getAdjacent(block).filter { it.type == Material.AIR && it.getRelative(BlockFace.DOWN).isSolid }
+                BlockUtil.getAdjacent(block)
+                    .filter { it.type == Material.AIR && it.getRelative(BlockFace.DOWN).isSolid }
                     .randomOrNull()
             }.toMutableList()
 

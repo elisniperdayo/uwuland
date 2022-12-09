@@ -5,7 +5,7 @@ import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.interfaces.PerkListener
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.util.getRadius
+import me.aehz.uwuland.util.BlockUtil
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -25,7 +25,7 @@ class Xray(
     private val positions = mutableMapOf<String, Block>()
 
     init {
-        stg["range"] = "13.0"
+        stg["range"] = "12.0"
         Bukkit.getPluginManager().registerEvents(this, plugin)
         EventManager.register(this, type)
     }
@@ -36,10 +36,10 @@ class Xray(
         if (!hasPerk(e.player)) return
         if (positions[e.player.name] == e.player.location.block) return
         val range = stg["range"]!!.toDouble()
-        val r = getRadius(
-            e.player.location,
+        val r = BlockUtil.getRadiusSolid(
+            e.player.location.block,
             range
-        ).filter { it.type != Material.AIR && it.type != Material.NETHER_PORTAL && it.type != Material.END_PORTAL && it.type != Material.WATER && it.type != Material.LAVA }
+        ).filter { it.isSolid }
         r.forEach {
             if (it.location.x == e.player.location.block.x + range
                 || it.location.x == e.player.location.block.x - range
