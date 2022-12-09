@@ -1,10 +1,8 @@
 package me.aehz.uwuland.listener.perks
 
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.data.PerkOwner
-import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -13,12 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 
 class NarutoSwap(
     override val plugin: Uwuland,
-    override var isEnabled: Boolean,
-    override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner> = mutableListOf()
-) :
-    PerkListener {
-    override var stg = mutableMapOf<String, String>()
+) : PerkListener() {
 
     init {
         stg["maxDistance"] = "10"

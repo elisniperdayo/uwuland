@@ -1,7 +1,7 @@
 package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
 import org.bukkit.command.Command
@@ -48,14 +48,14 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
             val set = listener.setStg(key, value)
             if (!set) {
                 sender.sendMessage(
-                    "§cSetting does not exist. Available settings for ${listener.getAlias()}:\n${
+                    "§cSetting does not exist. Available settings for ${listener.alias}:\n${
                         getFormattedAvailableSettings(
                             listener
                         )
                     }"
                 )
             } else {
-                sender.sendMessage("Successfully set ${key} of ${listener.getAlias()} to ${value}")
+                sender.sendMessage("Successfully set ${key} of ${listener.alias} to ${value}")
             }
         }
         return true

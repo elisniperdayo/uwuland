@@ -8,7 +8,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import kotlin.math.log
 
 
 class Perk(private val plugin: Uwuland) : CommandExecutor {
@@ -23,7 +22,7 @@ class Perk(private val plugin: Uwuland) : CommandExecutor {
                     val playerPerks =
                         EventManager.getPerksByName(it[0])
                             .filter { it.type == ListenerType.PERK }
-                            .map { it.getAlias() }
+                            .map { it.alias }
                             .toMutableList()
 
                     when (method) {

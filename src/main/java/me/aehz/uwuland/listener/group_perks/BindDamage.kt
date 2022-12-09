@@ -6,8 +6,7 @@ import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
 import org.bukkit.Bukkit
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.enums.ListenerType
-import me.aehz.uwuland.interfaces.GroupPerkListener
+import me.aehz.uwuland.abstracts.GroupPerkListener
 import org.bukkit.EntityEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -15,7 +14,6 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -25,12 +23,8 @@ import kotlin.math.min
 
 class BindDamage(
     override val plugin: Uwuland,
-    override var isEnabled: Boolean,
-    override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner> = mutableListOf(),
 ) :
-    GroupPerkListener {
-    override var stg = mutableMapOf<String, String>()
+    GroupPerkListener() {
 
     init {
         stg["damageMultiplier"] = "1"

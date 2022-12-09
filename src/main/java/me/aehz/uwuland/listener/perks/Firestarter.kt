@@ -2,9 +2,7 @@ package me.aehz.uwuland.listener.perks
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
-import me.aehz.uwuland.enums.ListenerType
-import me.aehz.uwuland.interfaces.PerkListener
-import me.aehz.uwuland.interfaces.TimedPerk
+import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.BlockUtil
 import org.bukkit.Bukkit
@@ -17,11 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 
 class Firestarter(
     override val plugin: Uwuland,
-    override var isEnabled: Boolean,
-    override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner> = mutableListOf()
-) : PerkListener, TimedPerk {
-    override var stg = mutableMapOf<String, String>()
+) : PerkListener() {
 
     init {
         stg["min"] = "420"

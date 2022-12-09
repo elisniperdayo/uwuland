@@ -2,10 +2,8 @@ package me.aehz.uwuland.listener.perks
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent
 import me.aehz.uwuland.Uwuland
-import me.aehz.uwuland.data.PerkOwner
-import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.enums.ListenerType
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Mob
@@ -18,11 +16,7 @@ import org.bukkit.potion.PotionEffectType
 
 class BunnyJump(
     override val plugin: Uwuland,
-    override var isEnabled: Boolean,
-    override val type: ListenerType,
-    override var perkOwners: MutableList<PerkOwner> = mutableListOf()
-) : PerkListener {
-    override var stg = mutableMapOf<String, String>()
+) : PerkListener() {
 
     init {
         stg["power"] = "5"

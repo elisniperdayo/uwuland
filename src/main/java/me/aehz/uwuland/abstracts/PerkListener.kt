@@ -1,4 +1,4 @@
-package me.aehz.uwuland.interfaces
+package me.aehz.uwuland.abstracts
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
@@ -9,18 +9,14 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
 
-interface PerkListener : Listener {
-    val plugin: Uwuland
-    val type: ListenerType
-    var isEnabled: Boolean
-    var stg: MutableMap<String, String>
-    var perkOwners: MutableList<PerkOwner>
-
-    fun getAlias(): String {
-        return this.javaClass.name.substringAfterLast(".")
-    }
+abstract class PerkListener : Listener {
+    abstract val plugin: Uwuland
+    var isEnabled: Boolean = true
+    open val type: ListenerType = ListenerType.PERK
+    var stg: MutableMap<String, String> = mutableMapOf()
+    var perkOwners: MutableList<PerkOwner> = mutableListOf()
+    val alias = this.javaClass.name.substringAfterLast(".")
 
     fun enable() {
         isEnabled = true
@@ -36,11 +32,11 @@ interface PerkListener : Listener {
         return true
     }
 
-    fun setup(owner: PerkOwner): Boolean {
+    open fun setup(owner: PerkOwner): Boolean {
         return true
     }
 
-    fun unsetup(owner: PerkOwner) {
+    open fun unsetup(owner: PerkOwner) {
         return
     }
 
@@ -64,12 +60,14 @@ interface PerkListener : Listener {
     }
 
     fun remove(groupAlias: String) {
-        if (this is TimedPerk) {
-            this.stopTask(groupAlias)
-        }
+        this.stopTask(groupAlias)
         val owner = this.getOwner(groupAlias) ?: return
         this.unsetup(owner)
         perkOwners.removeIf { it.groupAlias == groupAlias }
+    }
+
+    private fun getOwner(groupAlias: String): PerkOwner? {
+        return perkOwners.find { it.groupAlias == groupAlias }
     }
 
     fun getPartners(entity: Entity): List<LivingEntity> {
@@ -98,7 +96,27 @@ interface PerkListener : Listener {
         return partners.filter { it != entity }
     }
 
-    fun getOwner(groupAlias: String): PerkOwner? {
-        return perkOwners.find { it.groupAlias == groupAlias }
+    //Functions for timed tasks
+    open fun task(targets: MutableList<LivingEntity>) {}
+
+    fun startTask(owner: PerkOwner) {
+        val targets = if (owner.type == PerkOwnerType.PLAYER) {
+            owner.getTargetsAsEntities()
+        } else {
+            val teamName = owner.groupAlias.substringAfter(":")
+            Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull { Bukkit.getPlayer(it) }
+                ?.toMutableList<LivingEntity>() ?: mutableListOf()
+        }
+        val delay = (stg["min"]!!.toInt()..stg["max"]!!.toInt()).random().toLong()
+        owner.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, Runnable {
+            if (this.isEnabled) task(targets)
+            startTask(owner)
+        }, delay)
     }
+
+    private fun stopTask(groupAlias: String) {
+        val taskId = perkOwners.find { it.groupAlias == groupAlias }?.taskId ?: return
+        Bukkit.getScheduler().cancelTask(taskId)
+    }
+
 }

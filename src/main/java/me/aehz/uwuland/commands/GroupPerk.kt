@@ -2,8 +2,7 @@ package me.aehz.uwuland.commands
 
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.enums.ListenerType
-import me.aehz.uwuland.enums.PerkOwnerType
-import me.aehz.uwuland.interfaces.GroupPerkListener
+import me.aehz.uwuland.abstracts.GroupPerkListener
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.MultiTabCompleterBuilder
 import org.bukkit.Bukkit

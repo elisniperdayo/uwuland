@@ -1,7 +1,7 @@
 package me.aehz.uwuland.managers
 
 import me.aehz.uwuland.enums.ListenerType
-import me.aehz.uwuland.interfaces.PerkListener
+import me.aehz.uwuland.abstracts.PerkListener
 import org.bukkit.entity.Entity
 
 object EventManager {
