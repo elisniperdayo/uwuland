@@ -33,11 +33,12 @@ class Tesla(
         val range = stg["range"]!!.toDouble()
         val nearbyEntities = perkEntity.getNearbyEntities(range, 20.0, range)
 
-        val i = 0
+        var i = 0
         while (i < stg["amount"]!!.toInt() && nearbyEntities.isNotEmpty()) {
             val en = nearbyEntities.random()
             en.location.world.strikeLightning(en.location)
             nearbyEntities.removeIf { it == en }
+            i++
         }
     }
 
