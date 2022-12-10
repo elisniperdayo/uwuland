@@ -56,7 +56,7 @@ abstract class PerkListener : Listener {
     }
 
     fun hasPerkByName(name: String): Boolean {
-        return perkOwners.find { it.getTargetsAsEntities().any { it.name == name && it is Player } } != null
+        return perkOwners.find { it.getTargetsAsLivingEntities().any { it.name == name && it is Player } } != null
     }
 
     fun remove(groupAlias: String) {
@@ -75,7 +75,7 @@ abstract class PerkListener : Listener {
         perkOwners.forEach {
             when (it.type) {
                 PerkOwnerType.PLAYER -> {
-                    if (it.targets.contains(entity.uniqueId)) partners.addAll(it.getTargetsAsEntities())
+                    if (it.targets.contains(entity.uniqueId)) partners.addAll(it.getTargetsAsLivingEntities())
                 }
 
                 PerkOwnerType.TEAM -> {
@@ -101,7 +101,7 @@ abstract class PerkListener : Listener {
 
     fun startTask(owner: PerkOwner) {
         val targets = if (owner.type == PerkOwnerType.PLAYER) {
-            owner.getTargetsAsEntities()
+            owner.getTargetsAsLivingEntities()
         } else {
             val teamName = owner.groupAlias.substringAfter(":")
             Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull { Bukkit.getPlayer(it) }

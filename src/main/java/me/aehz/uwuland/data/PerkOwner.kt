@@ -14,7 +14,7 @@ data class PerkOwner(
     var taskId: Int = -1
     var cooldown: Long = System.currentTimeMillis() / 1000
 
-    fun getTargetsAsEntities(): MutableList<LivingEntity> {
+    fun getTargetsAsLivingEntities(): MutableList<LivingEntity> {
         return targets.mapNotNull { Bukkit.getEntity(it) }.filterIsInstance<LivingEntity>().toMutableList()
     }
 }

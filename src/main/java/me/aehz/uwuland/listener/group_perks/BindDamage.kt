@@ -94,7 +94,7 @@ class BindDamage(
     }
 
     override fun setup(owner: PerkOwner): Boolean {
-        val targets = owner.getTargetsAsEntities()
+        val targets = owner.getTargetsAsLivingEntities()
         targets.forEach { e1 ->
             targets.forEach { e2 ->
                 if (e1 != e2) addHpModifier(e1, e2)
@@ -104,7 +104,7 @@ class BindDamage(
     }
 
     override fun unsetup(owner: PerkOwner) {
-        val targets = owner.getTargetsAsEntities()
+        val targets = owner.getTargetsAsLivingEntities()
         targets.forEach { e1 ->
             targets.forEach { e2 ->
                 if (e1 != e2) removeHpModifier(e1, e2)
