@@ -38,7 +38,6 @@ class Firestarter(
 
         if (burnableBlocks.isEmpty()) return
 
-        Bukkit.getLogger().info("BURNING")
         val burnableAir =
             burnableBlocks.mapNotNull { block ->
                 BlockUtil.getAdjacent(block)
