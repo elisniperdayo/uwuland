@@ -107,9 +107,11 @@ abstract class PerkListener : Listener {
             Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull { Bukkit.getPlayer(it) }
                 ?.toMutableList<LivingEntity>() ?: mutableListOf()
         }
+
         val delay = (stg["min"]!!.toInt()..stg["max"]!!.toInt()).random().toLong()
+
         owner.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, Runnable {
-            if (this.isEnabled) task(targets)
+            if (this.isEnabled && targets.isNotEmpty()) task(targets)
             startTask(owner)
         }, delay)
     }
