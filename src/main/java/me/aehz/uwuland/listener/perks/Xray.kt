@@ -10,13 +10,14 @@ import org.bukkit.block.Block
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import java.util.UUID
 
 
 class Xray(
     override val plugin: Uwuland,
 ) : PerkListener() {
     private val barrierData = Bukkit.createBlockData(Material.BARRIER)
-    private val positions = mutableMapOf<String, Block>()
+    private val positions = mutableMapOf<UUID, Block>()
 
     init {
         stg["range"] = "12.0"
@@ -28,7 +29,7 @@ class Xray(
     fun onMove(e: PlayerMoveEvent) {
         if (!isEnabled) return
         if (!hasPerk(e.player)) return
-        if (positions[e.player.name] == e.player.location.block) return
+        if (positions[e.player.uniqueId] == e.player.location.block) return
         val range = stg["range"]!!.toDouble()
         val r = BlockUtil.getRadiusSolid(
             e.player.location.block,
@@ -48,7 +49,7 @@ class Xray(
             }
         }
 
-        positions[e.player.name] = e.player.location.block
+        positions[e.player.uniqueId] = e.player.location.block
     }
 
     @EventHandler
