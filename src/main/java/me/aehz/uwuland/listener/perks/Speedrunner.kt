@@ -36,6 +36,7 @@ class Speedrunner(
         val xChange = max(e.to.x, e.from.x) - min(e.to.x, e.from.x)
         var yChange = max(e.to.y, e.from.y) - min(e.to.y, e.from.y)
         val zChange = max(e.to.z, e.from.z) - min(e.to.z, e.from.z)
+        // Increase value of Ychange if player is primarily moving upwards
         if (xChange + zChange < yChange / 2) {
             yChange *= 2.4
         }
