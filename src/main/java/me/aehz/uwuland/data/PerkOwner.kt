@@ -12,9 +12,18 @@ data class PerkOwner(
     val combinedUniqueIdString: String = ""
 ) {
     var taskId: Int = -1
-    var cooldown: Long = System.currentTimeMillis() / 1000
+    private var lastUsed: Long = System.currentTimeMillis() / 1000
 
     fun getTargetsAsLivingEntities(): MutableList<LivingEntity> {
         return targets.mapNotNull { Bukkit.getEntity(it) }.filterIsInstance<LivingEntity>().toMutableList()
+    }
+
+    fun isOnCooldown(cooldown: Int): Boolean {
+        val now = System.currentTimeMillis() / 1000
+        return now - lastUsed < cooldown
+    }
+
+    fun updateCooldown() {
+        lastUsed = System.currentTimeMillis() / 1000
     }
 }
