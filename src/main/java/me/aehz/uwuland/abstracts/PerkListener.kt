@@ -66,7 +66,7 @@ abstract class PerkListener : Listener {
         perkOwners.removeIf { it.groupAlias == groupAlias }
     }
 
-    private fun getOwner(groupAlias: String): PerkOwner? {
+    fun getOwner(groupAlias: String): PerkOwner? {
         return perkOwners.find { it.groupAlias == groupAlias }
     }
 
