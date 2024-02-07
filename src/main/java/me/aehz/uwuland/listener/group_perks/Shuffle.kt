@@ -9,15 +9,11 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 
 
-class Shuffle(
-    override val plugin: Uwuland,
-) : GroupPerkListener() {
+class Shuffle() : GroupPerkListener() {
 
     init {
         stg["min"] = "13000"
         stg["max"] = "23000"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
     }
 
     override fun setup(owner: PerkOwner): Boolean {

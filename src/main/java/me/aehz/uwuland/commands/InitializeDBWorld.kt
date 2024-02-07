@@ -21,7 +21,7 @@ class InitializeDBWorld(private val plugin: Uwuland) : CommandExecutor {
             MultiTabCompleterBuilder().create()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender is Player) return true
         if (Bukkit.getWorld("DatabaseWorld847593474398") == null) {
             val creator = WorldCreator("DatabaseWorld847593474398")

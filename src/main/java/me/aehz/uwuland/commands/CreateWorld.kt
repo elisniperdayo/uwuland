@@ -17,7 +17,7 @@ class CreateWorld(private val plugin: Uwuland) : CommandExecutor {
             MultiTabCompleterBuilder().create()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args!!.size < 1) return false
         if (sender is Player) return false
         val creator = WorldCreator(args[0])

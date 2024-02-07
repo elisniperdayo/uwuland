@@ -47,7 +47,7 @@ class Perk(private val plugin: Uwuland) : CommandExecutor {
                 .create()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args!!.size < 3) return false
         val p = Bukkit.getPlayer(args[0]) ?: return false
         val listener = EventManager.get(args[2]) ?: return false

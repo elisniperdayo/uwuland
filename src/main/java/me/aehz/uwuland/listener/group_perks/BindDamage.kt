@@ -13,6 +13,7 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -21,18 +22,13 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-class BindDamage(
-    override val plugin: Uwuland,
-) :
-    GroupPerkListener() {
+class BindDamage() : GroupPerkListener() {
 
     init {
         stg["damageMultiplier"] = "1"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onDamage(e: EntityDamageEvent) {
         if (!isEnabled) return
         if (e.damage == 0.0) return

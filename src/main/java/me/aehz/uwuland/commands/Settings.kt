@@ -20,7 +20,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
                     when (it[1]) {
                         "set" -> {
                             val listener = EventManager.get(it[0])
-                            listener?.stg?.keys?.toMutableList() ?: mutableListOf()
+                            listener?.getSettings() ?: mutableListOf()
                         }
 
                         else -> mutableListOf()
@@ -35,7 +35,7 @@ class Settings(private val plugin: Uwuland) : CommandExecutor {
                 .create()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args!!.size < 2) return false
         val listener = EventManager.get(args[0]) ?: return false
         val method = args[1]

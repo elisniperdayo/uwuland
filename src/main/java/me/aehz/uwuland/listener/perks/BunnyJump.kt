@@ -14,9 +14,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class BunnyJump(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class BunnyJump() : PerkListener() {
 
     init {
         stg["power"] = "5"

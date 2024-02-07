@@ -3,8 +3,9 @@ package me.aehz.uwuland.abstracts
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
+import me.aehz.uwuland.Uwuland
 
-abstract class GroupPerkListener : PerkListener() {
+abstract class GroupPerkListener() : PerkListener() {
     override val type: ListenerType = ListenerType.GROUP_PERK
 
     fun addTeam(name: String) {

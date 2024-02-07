@@ -7,14 +7,10 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 
-class PlayerJoinGreeting(
-    override val plugin: Uwuland,
-) : GlobalPerkListener() {
+class PlayerJoinGreeting() : GlobalPerkListener() {
 
     init {
         stg["message"] = "UWU"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
     }
 
     @EventHandler

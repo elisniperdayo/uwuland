@@ -15,14 +15,12 @@ import org.bukkit.event.entity.EntityDamageEvent
 import java.util.UUID
 
 
-class Naruto(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class Naruto() : PerkListener() {
     private val lastLoc = mutableMapOf<UUID, MutableList<Location>>()
 
+    override var SETTING_taskDelay = 10..10
+
     init {
-        stg["min"] = "10"
-        stg["max"] = "10"
         stg["cooldown"] = "12"
         Bukkit.getPluginManager().registerEvents(this, plugin)
         EventManager.register(this, type)
@@ -33,15 +31,12 @@ class Naruto(
         if (!isEnabled) return
         if (!hasPerk(e.entity)) return
         val owner = getOwner(e.entity.name) ?: return
-        val cooldown = stg["cooldown"]!!.toInt()
-        if (owner.isOnCooldown(cooldown)) return
         val loc = getTeleportLocation(e.entity.uniqueId) ?: return
+        if (owner.isOnCooldown(stg["cooldown"]!!.toInt())) return
         val wood = getRandomWood()
         e.entity.location.block.type = wood
         e.entity.location.block.getRelative(BlockFace.UP).type = wood
         e.entity.teleport(loc.add(0.0, 1.0, 0.0))
-
-        owner.updateCooldown()
         e.damage = 0.0
     }
 

@@ -8,15 +8,9 @@ import org.bukkit.entity.Arrow
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
-class ExplosiveArrows(
-    override val plugin: Uwuland,
-) : GlobalPerkListener() {
-
-
+class ExplosiveArrows() : GlobalPerkListener() {
     init {
         stg["power"] = "30"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
     }
 
     @EventHandler

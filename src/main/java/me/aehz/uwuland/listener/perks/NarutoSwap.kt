@@ -9,15 +9,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 
-class NarutoSwap(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class NarutoSwap() : PerkListener() {
 
     init {
         stg["maxDistance"] = "10"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-
     }
 
     @EventHandler

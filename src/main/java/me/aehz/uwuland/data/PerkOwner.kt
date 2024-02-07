@@ -20,7 +20,9 @@ data class PerkOwner(
 
     fun isOnCooldown(cooldown: Int): Boolean {
         val now = System.currentTimeMillis() / 1000
-        return now - lastUsed < cooldown
+        val result = now - lastUsed < cooldown
+        if (result) updateCooldown()
+        return result
     }
 
     fun updateCooldown() {

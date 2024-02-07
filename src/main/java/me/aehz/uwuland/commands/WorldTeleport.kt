@@ -19,7 +19,7 @@ class WorldTeleport(private val plugin: Uwuland) : CommandExecutor {
             MultiTabCompleterBuilder().addStringOptions(worldNames).create()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) return true
         val worldName = args!![0]
         if (!worldNames.contains(worldName)) return true

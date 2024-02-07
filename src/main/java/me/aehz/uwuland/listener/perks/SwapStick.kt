@@ -10,9 +10,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
 
-class SwapStick(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class SwapStick() : PerkListener() {
 
     init {
         stg["material"] = "STICK"

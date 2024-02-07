@@ -1,22 +1,34 @@
 package me.aehz.uwuland.abstracts
 
-import me.aehz.uwuland.Uwuland
+import me.aehz.uwuland.PluginInstance
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
+import me.aehz.uwuland.managers.EventManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
+import java.lang.Error
 
-abstract class PerkListener : Listener {
-    abstract val plugin: Uwuland
+abstract class PerkListener() : Listener {
+    val plugin = PluginInstance.get()!!
     var isEnabled: Boolean = true
     open val type: ListenerType = ListenerType.PERK
     var stg: MutableMap<String, String> = mutableMapOf()
     var perkOwners: MutableList<PerkOwner> = mutableListOf()
     val alias = this.javaClass.name.substringAfterLast(".")
+    open var SETTING_taskDelay: IntRange = -1..-1
+
+    init {
+        registerEvents()
+    }
+
+    private fun registerEvents() {
+        Bukkit.getPluginManager().registerEvents(this, plugin)
+        EventManager.register(this, ListenerType.PERK)
+    }
 
     fun enable() {
         isEnabled = true
@@ -24,6 +36,15 @@ abstract class PerkListener : Listener {
 
     fun disable() {
         isEnabled = false
+    }
+
+    fun getSettings(): MutableList<String> {
+        val props = this.javaClass.kotlin.members
+        val propNames = mutableListOf<String>()
+        for (prop in props) {
+            propNames.add(prop.name)
+        }
+        return propNames
     }
 
     fun setStg(key: String, value: String): Boolean {
@@ -100,6 +121,7 @@ abstract class PerkListener : Listener {
     open fun task(targets: MutableList<LivingEntity>) {}
 
     fun startTask(owner: PerkOwner) {
+        if (SETTING_taskDelay.first == -1) throw Error("ATTEMPTED TO START TASK WITHOUT OVERRIDING DELAY")
         val targets = if (owner.type == PerkOwnerType.PLAYER) {
             owner.getTargetsAsLivingEntities()
         } else {
@@ -108,17 +130,16 @@ abstract class PerkListener : Listener {
                 ?.toMutableList<LivingEntity>() ?: mutableListOf()
         }
 
-        val delay = (stg["min"]!!.toInt()..stg["max"]!!.toInt()).random().toLong()
-
+        val d = SETTING_taskDelay.random().toLong()
+        Bukkit.getLogger().info("$d")
         owner.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, Runnable {
             if (this.isEnabled && targets.isNotEmpty()) task(targets)
             startTask(owner)
-        }, delay)
+        }, d)
     }
 
     private fun stopTask(groupAlias: String) {
         val taskId = perkOwners.find { it.groupAlias == groupAlias }?.taskId ?: return
         Bukkit.getScheduler().cancelTask(taskId)
     }
-
 }

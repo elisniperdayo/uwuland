@@ -10,9 +10,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 
-class Tesla(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class Tesla() : PerkListener() {
 
     init {
         stg["min"] = "40"

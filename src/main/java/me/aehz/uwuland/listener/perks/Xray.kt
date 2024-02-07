@@ -13,9 +13,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import java.util.UUID
 
 
-class Xray(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class Xray() : PerkListener() {
     private val barrierData = Bukkit.createBlockData(Material.BARRIER)
     private val positions = mutableMapOf<UUID, Block>()
 

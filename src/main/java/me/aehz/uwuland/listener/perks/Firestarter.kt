@@ -10,12 +10,11 @@ import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 
 
-class Firestarter(
-    override val plugin: Uwuland,
-) : PerkListener() {
+class Firestarter() : PerkListener() {
 
     init {
         stg["min"] = "420"
@@ -55,7 +54,7 @@ class Firestarter(
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onDmg(e: EntityDamageEvent) {
         if (!isEnabled) return
         if (!hasPerk(e.entity)) return

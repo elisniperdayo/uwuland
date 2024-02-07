@@ -20,7 +20,7 @@ class ToggleShuffle(private val plugin: Uwuland) : CommandExecutor {
 
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (!sender.isOp) return false
         if (args!!.isEmpty()) return false
         if (args[0] == "enable") {

@@ -8,15 +8,11 @@ import org.bukkit.entity.Enderman
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
-class RandomFallDamage(
-    override val plugin: Uwuland,
-) : GlobalPerkListener() {
+class RandomFallDamage() : GlobalPerkListener() {
 
     init {
         stg["min"] = "0"
         stg["max"] = "21"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
     }
 
     @EventHandler
