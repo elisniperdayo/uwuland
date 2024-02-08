@@ -1,8 +1,6 @@
 package me.aehz.uwuland.listener.global_events
 
-import me.aehz.uwuland.Uwuland
 import org.bukkit.Bukkit
-import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.data.PerkOwner
 import org.bukkit.Location
@@ -19,20 +17,14 @@ class Naruto() : PerkListener() {
     private val lastLoc = mutableMapOf<UUID, MutableList<Location>>()
 
     override var SETTING_taskDelay = 10..10
-
-    init {
-        stg["cooldown"] = "12"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-    }
+    override var SETTING_cooldown = 12
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onDmg(e: EntityDamageEvent) {
         if (!isEnabled) return
         if (!hasPerk(e.entity)) return
-        val owner = getOwner(e.entity.name) ?: return
         val loc = getTeleportLocation(e.entity.uniqueId) ?: return
-        if (owner.isOnCooldown(stg["cooldown"]!!.toInt())) return
+        if (!handleCooldown(e.entity)) return
         val wood = getRandomWood()
         e.entity.location.block.type = wood
         e.entity.location.block.getRelative(BlockFace.UP).type = wood

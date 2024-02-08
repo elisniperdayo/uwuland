@@ -11,15 +11,13 @@ import org.bukkit.event.player.PlayerInteractEvent
 
 class NarutoSwap() : PerkListener() {
 
-    init {
-        stg["maxDistance"] = "10"
-    }
+    var SETTING_maxDistance = 10
 
     @EventHandler
     fun onPlayerAttack(e: PlayerInteractEvent) {
         if (!isEnabled) return
         if (!hasPerk(e.player)) return
-        val maxDistance = stg["maxDistance"]!!.toInt()
+        val maxDistance = SETTING_maxDistance
         val act = e.action
         val p = e.player
         if (act == Action.LEFT_CLICK_BLOCK) {

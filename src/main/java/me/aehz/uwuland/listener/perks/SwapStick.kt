@@ -12,19 +12,15 @@ import org.bukkit.event.EventHandler
 
 class SwapStick() : PerkListener() {
 
-    init {
-        stg["material"] = "STICK"
-        stg["maxDistance"] = "100"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-    }
+    var SETTING_material = "STICK"
+    var SETTING_maxDistance = 100
 
     @EventHandler
     fun onStickClick(e: PlayerArmSwingEvent) {
         if (!isEnabled) return
         if (!hasPerk(e.player)) return
-        val material = Material.matchMaterial(stg["material"]!!)
-        val maxDistance = stg["maxDistance"]!!.toInt()
+        val material = Material.matchMaterial(SETTING_material)
+        val maxDistance = SETTING_maxDistance
         val p = e.player
         val target = e.player.getTargetEntity(maxDistance)
         if (p.inventory.itemInMainHand.type != material || target !is Entity) return

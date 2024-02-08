@@ -42,15 +42,11 @@ class Uwuland : JavaPlugin() {
         Xray()
         Speedrunner()
         Naruto()
+        Abductor()
 
         // TODO ADD Speedrunner infinite glass, slowly refilling
-        // TODO MAKE TIMED TASKS NOT CRASH IF PLAYERS LEFT
-        // TODO CHECK Shuffle
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
-        // TODO ADD SETTINGS OBJECT TO PERKLISTENERS
 
-        // ShortSighted: Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
-        // Abduction: Swap stick but on every left click (outside cqc. 7 second cooldown against (DONT SWAP INV )
         // Disorganized: Shuffle inventory on open / on timer, keeps hotbar on death
         // Photosynthesis: Gain buffs / debuffs based on light level (reapply every second )
         // Magnet: Attract everything (less range / effect on players)
@@ -58,6 +54,8 @@ class Uwuland : JavaPlugin() {
         // Phoenix: On death => slowly revive and burn area. Turn water into lava, lower max hp
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // FISH FEAR ME (blow up nearby fish)
+
+        // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
         SwapStick()
         BunnyJump()
 
@@ -74,14 +72,13 @@ class Uwuland : JavaPlugin() {
         //Commands
         me.aehz.uwuland.commands.Beta(this)
         WorldTeleport(this)
-        //InitializeDBWorld(this)
         EventToggle(this)
         Settings(this)
-        //TODO UPDATE SETTINGS TO USE FUNCTIONAL TAB COMPLETION
-        //CreateWorld(this)
         Perk(this)
         GroupPerk(this)
         //ToggleShuffle(this) // REWORK THIS TO BE TIMED
+        //InitializeDBWorld(this)
+        //CreateWorld(this)
 
         // GROUP EVENTS: /group_event <[Online_players]|[teams]> <add|remove> <event>
 

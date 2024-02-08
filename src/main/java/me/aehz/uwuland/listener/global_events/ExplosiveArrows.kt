@@ -9,17 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 class ExplosiveArrows() : GlobalPerkListener() {
-    init {
-        stg["power"] = "30"
-    }
+
+    var SETTING_power = 30.0f
 
     @EventHandler
     fun onEntitiyDamage(e: EntityDamageByEntityEvent) {
         if (!isEnabled) return
         if (!isGloballyEnabled && !hasPerk(e.entity)) return
-        val power = stg["power"]!!.toFloat()
         if (e.damager is Arrow) {
-            e.entity.location.createExplosion(power)
+            e.entity.location.createExplosion(SETTING_power)
         }
     }
 }

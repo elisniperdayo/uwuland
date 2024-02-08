@@ -16,11 +16,7 @@ import org.bukkit.potion.PotionEffectType
 
 class BunnyJump() : PerkListener() {
 
-    init {
-        stg["power"] = "5"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-    }
+    var SETTING_power = 5
 
     private val crouch = HashMap<String, HashMap<String, Float>>()
 
@@ -47,8 +43,7 @@ class BunnyJump() : PerkListener() {
                 }
             }, 4, 8).taskId.toFloat()
         } else {
-            val power = stg["power"]!!.toFloat()
-            val boost = (power * p.exp).toInt()
+            val boost = (SETTING_power * p.exp).toInt()
             p.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 17, boost))
             if (p.exp == 1.0f) {
                 for (entity in p.location.chunk.entities) {

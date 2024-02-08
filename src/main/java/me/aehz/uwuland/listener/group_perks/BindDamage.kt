@@ -1,5 +1,6 @@
 package me.aehz.uwuland.listener.group_perks
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import org.bukkit.entity.Player
 
 import me.aehz.uwuland.Uwuland
@@ -18,15 +19,14 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import kotlin.math.max
 import kotlin.math.min
 
 
 class BindDamage() : GroupPerkListener() {
 
-    init {
-        stg["damageMultiplier"] = "1"
-    }
+    var SETTING_damageMultiplier = 1.0
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onDamage(e: EntityDamageEvent) {
@@ -35,7 +35,7 @@ class BindDamage() : GroupPerkListener() {
         if (!hasPerk(e.entity)) return
         val damageTaker = e.entity
         if (damageTaker !is LivingEntity) return
-        val dmg = e.finalDamage * stg["damageMultiplier"]!!.toFloat()
+        val dmg = e.finalDamage * SETTING_damageMultiplier
         val partners = getPartners(damageTaker)
 
         for (partner in partners) {
@@ -46,6 +46,20 @@ class BindDamage() : GroupPerkListener() {
             if ((partner !is Player && partner.isDead) || (damageTaker !is Player && damageTaker.health <= dmg)) {
                 removeHpModifier(damageTaker, partner)
                 removeHpModifier(partner, damageTaker)
+            }
+        }
+    }
+
+    @EventHandler
+    fun onRespawn(e: PlayerPostRespawnEvent) {
+        if (!isEnabled) return
+        if (!hasPerk(e.player)) return
+        val partners = getPartners(e.player)
+        for (partner in partners) {
+            Bukkit.getLogger().info("${partner.name} ${partner.health}")
+            Bukkit.getLogger().info("${e.player.name} ${e.player.health}")
+            if (partner.health > 0) {
+                e.player.health = partner.health
             }
         }
     }
@@ -63,19 +77,17 @@ class BindDamage() : GroupPerkListener() {
         }
     }
 
+    //TODO SYNC ON JOIN
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
-
         if (!isEnabled) return
         if (!hasPerk(e.player)) return
-
         val partners = getPartners(e.player)
-        Bukkit.getLogger().info("$partners")
-
         for (partner in partners) {
             addHpModifier(e.player, partner)
             addHpModifier(partner, e.player)
         }
+        e.player.health = partners[0].health
     }
 
     @EventHandler
@@ -91,11 +103,18 @@ class BindDamage() : GroupPerkListener() {
 
     override fun setup(owner: PerkOwner): Boolean {
         val targets = owner.getTargetsAsLivingEntities()
+        val totalHp = targets.map { it.health }.reduce { acc, e -> acc + e }
+        val totalMaxHp =
+            targets.map { it.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue }.reduce { acc, e -> acc + e }
+
         targets.forEach { e1 ->
             targets.forEach { e2 ->
                 if (e1 != e2) addHpModifier(e1, e2)
             }
         }
+
+        targets.forEach { it.health = min(totalMaxHp, totalHp) }
+
         return true
     }
 
@@ -105,6 +124,7 @@ class BindDamage() : GroupPerkListener() {
             targets.forEach { e2 ->
                 if (e1 != e2) removeHpModifier(e1, e2)
             }
+            e1.health = min(e1.health / targets.size, e1.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue)
         }
     }
 

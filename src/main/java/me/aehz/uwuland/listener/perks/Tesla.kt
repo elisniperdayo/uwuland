@@ -12,14 +12,9 @@ import org.bukkit.event.entity.EntityDamageEvent
 
 class Tesla() : PerkListener() {
 
-    init {
-        stg["min"] = "40"
-        stg["max"] = "140"
-        stg["amount"] = "5"
-        stg["range"] = "12"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-    }
+    override var SETTING_taskDelay = 40..140
+    var SETTING_amount = 5
+    var SETTING_range = 12.0
 
     override fun setup(owner: PerkOwner): Boolean {
         startTask(owner)
@@ -28,11 +23,10 @@ class Tesla() : PerkListener() {
 
     override fun task(targets: MutableList<LivingEntity>) {
         val perkEntity = targets[0]
-        val range = stg["range"]!!.toDouble()
-        val nearbyEntities = perkEntity.getNearbyEntities(range, 20.0, range)
+        val nearbyEntities = perkEntity.getNearbyEntities(SETTING_range, 20.0, SETTING_range)
 
         var i = 0
-        while (i < stg["amount"]!!.toInt() && nearbyEntities.isNotEmpty()) {
+        while (i < SETTING_amount && nearbyEntities.isNotEmpty()) {
             val en = nearbyEntities.random()
             en.location.world.strikeLightning(en.location)
             nearbyEntities.removeIf { it == en }

@@ -11,10 +11,7 @@ import org.bukkit.entity.LivingEntity
 
 class Shuffle() : GroupPerkListener() {
 
-    init {
-        stg["min"] = "13000"
-        stg["max"] = "23000"
-    }
+    override var SETTING_taskDelay = 13000..23000
 
     override fun setup(owner: PerkOwner): Boolean {
         startTask(owner)
@@ -32,6 +29,8 @@ class Shuffle() : GroupPerkListener() {
             val random = (0..i - 1).random()
             val e1 = targets[i]
             val e2 = targets[random]
+            e1.sendMessage("You have been swapped with ${e2.name}")
+            e2.sendMessage("You have been swapped with ${e1.name} ")
             swapEntities(e1, e2)
         }
     }

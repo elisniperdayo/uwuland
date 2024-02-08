@@ -15,17 +15,26 @@ data class PerkOwner(
     private var lastUsed: Long = System.currentTimeMillis() / 1000
 
     fun getTargetsAsLivingEntities(): MutableList<LivingEntity> {
+        if (type == PerkOwnerType.TEAM) {
+            val teamName = groupAlias.substringAfter(":")
+            return Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull {
+                Bukkit.getPlayer(
+                    it
+                )
+            }
+                ?.toMutableList() ?: mutableListOf()
+        }
         return targets.mapNotNull { Bukkit.getEntity(it) }.filterIsInstance<LivingEntity>().toMutableList()
     }
 
     fun isOnCooldown(cooldown: Int): Boolean {
         val now = System.currentTimeMillis() / 1000
         val result = now - lastUsed < cooldown
-        if (result) updateCooldown()
+        Bukkit.getLogger().info("${now - lastUsed} < $cooldown : $result")
         return result
     }
 
-    fun updateCooldown() {
+    fun updateCooldown(cooldown: Int) {
         lastUsed = System.currentTimeMillis() / 1000
     }
 }

@@ -10,17 +10,15 @@ import org.bukkit.event.entity.EntityDamageEvent
 
 class RandomFallDamage() : GlobalPerkListener() {
 
-    init {
-        stg["min"] = "0"
-        stg["max"] = "21"
-    }
+    var SETTING_minDamage = 0
+    var SETTING_maxDamage = 21
 
     @EventHandler
     fun onPlayerFallDamage(e: EntityDamageEvent) {
         if (!isEnabled) return
         if (!isGloballyEnabled && !hasPerk(e.entity)) return
-        val min = stg["min"]!!.toInt()
-        val max = stg["max"]!!.toInt()
+        val min = SETTING_minDamage
+        val max = SETTING_maxDamage
         val random = (min..max).random().toDouble()
         if (e.entity !is Enderman && e.cause == EntityDamageEvent.DamageCause.FALL) {
             e.damage = random

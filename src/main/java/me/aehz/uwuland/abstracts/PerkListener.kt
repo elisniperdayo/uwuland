@@ -16,10 +16,10 @@ abstract class PerkListener() : Listener {
     val plugin = PluginInstance.get()!!
     var isEnabled: Boolean = true
     open val type: ListenerType = ListenerType.PERK
-    var stg: MutableMap<String, String> = mutableMapOf()
     var perkOwners: MutableList<PerkOwner> = mutableListOf()
     val alias = this.javaClass.name.substringAfterLast(".")
     open var SETTING_taskDelay: IntRange = -1..-1
+    open var SETTING_cooldown = -1
 
     init {
         registerEvents()
@@ -39,17 +39,18 @@ abstract class PerkListener() : Listener {
     }
 
     fun getSettings(): MutableList<String> {
-        val props = this.javaClass.kotlin.members
-        val propNames = mutableListOf<String>()
-        for (prop in props) {
-            propNames.add(prop.name)
-        }
-        return propNames
+        val fields = this::class.java.declaredFields
+        val settingFields = fields.filter { it.name.startsWith("SETTING_") }
+        val settingFieldNames = settingFields.map { it.name }
+        return settingFieldNames.map { it.removePrefix("SETTING_") }.toMutableList()
     }
 
-    fun setStg(key: String, value: String): Boolean {
-        if (!this.stg.containsKey(key)) return false
-        this.stg[key] = value
+    fun setSettings(name: String, value: Any): Boolean {
+        val field = this::class.java.getDeclaredField("SETTING_${name}")
+        if (!field.trySetAccessible()) return false
+        val fieldValue = field.get(this)
+        if (fieldValue::class != value::class) return false
+        field.set(this, value)
         return true
     }
 
@@ -72,8 +73,19 @@ abstract class PerkListener() : Listener {
     }
 
     fun hasPerk(entity: Entity): Boolean {
-        val team = Bukkit.getScoreboardManager().mainScoreboard.getEntityTeam(entity)?.name
-        return perkOwners.find { it.targets.contains(entity.uniqueId) || it.groupAlias == team } != null
+        val teamName = Bukkit.getScoreboardManager().mainScoreboard.getEntityTeam(entity)?.name
+        return perkOwners.find { it.targets.contains(entity.uniqueId) || it.groupAlias == "TEAM:$teamName" } != null
+    }
+
+    fun handleCooldown(e: Entity): Boolean {
+        if (this.SETTING_cooldown <= 0) {
+            Bukkit.getLogger().info("Can not use handleCooldown with cooldown lower than 1. In $alias")
+            return false
+        }
+        val owner = getOwner(e.name) ?: return false
+        if (owner.isOnCooldown(this.SETTING_cooldown)) return false
+        owner.updateCooldown(this.SETTING_cooldown)
+        return true
     }
 
     fun hasPerkByName(name: String): Boolean {
@@ -103,7 +115,7 @@ abstract class PerkListener() : Listener {
                     val players = Bukkit
                         .getScoreboardManager()
                         .mainScoreboard
-                        .getTeam(it.groupAlias)
+                        .getTeam(it.groupAlias.removePrefix("TEAM:"))
                         ?.entries
                         ?.mapNotNull {
                             Bukkit.getPlayer(
@@ -121,21 +133,15 @@ abstract class PerkListener() : Listener {
     open fun task(targets: MutableList<LivingEntity>) {}
 
     fun startTask(owner: PerkOwner) {
-        if (SETTING_taskDelay.first == -1) throw Error("ATTEMPTED TO START TASK WITHOUT OVERRIDING DELAY")
-        val targets = if (owner.type == PerkOwnerType.PLAYER) {
-            owner.getTargetsAsLivingEntities()
-        } else {
-            val teamName = owner.groupAlias.substringAfter(":")
-            Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull { Bukkit.getPlayer(it) }
-                ?.toMutableList<LivingEntity>() ?: mutableListOf()
-        }
+        if (SETTING_taskDelay.first <= -1) throw Error("ATTEMPTED TO START TASK WITHOUT OVERRIDING DELAY OR NEGATIVE DELAY")
+        val targets = owner.getTargetsAsLivingEntities()
 
-        val d = SETTING_taskDelay.random().toLong()
-        Bukkit.getLogger().info("$d")
+        val delay = SETTING_taskDelay.random().toLong()
+
         owner.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, Runnable {
             if (this.isEnabled && targets.isNotEmpty()) task(targets)
             startTask(owner)
-        }, d)
+        }, delay)
     }
 
     private fun stopTask(groupAlias: String) {

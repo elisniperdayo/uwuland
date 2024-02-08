@@ -16,14 +16,9 @@ import org.bukkit.event.entity.EntityDamageEvent
 
 class Firestarter() : PerkListener() {
 
-    init {
-        stg["min"] = "420"
-        stg["max"] = "720"
-        stg["amount"] = "4"
-        stg["range"] = "12"
-        Bukkit.getPluginManager().registerEvents(this, plugin)
-        EventManager.register(this, type)
-    }
+    override var SETTING_taskDelay = 420..720
+    var SETTING_amount = 7
+    var SETTING_range = 12.0
 
     override fun setup(owner: PerkOwner): Boolean {
         startTask(owner)
@@ -32,7 +27,7 @@ class Firestarter() : PerkListener() {
 
     override fun task(targets: MutableList<LivingEntity>) {
         val perkEntity = targets[0]
-        val range = stg["range"]!!.toDouble()
+        val range = SETTING_range
         val burnableBlocks = BlockUtil.getRadiusSolid(perkEntity.location.block, range).filter { it.isBurnable }
 
         if (burnableBlocks.isEmpty()) return
@@ -45,7 +40,7 @@ class Firestarter() : PerkListener() {
             }.toMutableList()
 
         var i = 0
-        while (i < stg["amount"]!!.toInt() && burnableAir.isNotEmpty()) {
+        while (i < SETTING_amount && burnableAir.isNotEmpty()) {
             val block = burnableAir.random()
             block.type = Material.FIRE
             burnableAir.removeIf { it == block }

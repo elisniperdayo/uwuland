@@ -9,14 +9,12 @@ import org.bukkit.event.player.PlayerJoinEvent
 
 class PlayerJoinGreeting() : GlobalPerkListener() {
 
-    init {
-        stg["message"] = "UWU"
-    }
+    var SETTING_message = "UWU"
 
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
         if (!isEnabled) return
         if (!isGloballyEnabled && !hasPerk(e.player)) return
-        e.player.sendMessage("${stg["message"]} ${e.player.name}")
+        e.player.sendMessage("$SETTING_message ${e.player.name}")
     }
 }

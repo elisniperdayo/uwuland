@@ -13,6 +13,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerRespawnEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.util.UUID
 import kotlin.math.max
 import kotlin.math.min
@@ -25,10 +28,6 @@ class Speedrunner() : PerkListener() {
     var SETTING_speedBoost = 23.0
     var SETTING_maxHeal = 7.0
     var SETTING_maxDamage = 9.0
-
-    init {
-        getSettings()
-    }
 
     @EventHandler
     fun onMove(e: PlayerMoveEvent) {
@@ -51,19 +50,17 @@ class Speedrunner() : PerkListener() {
 
     override fun task(targets: MutableList<LivingEntity>) {
         val player = targets[0]
-        Bukkit.getLogger().info("MOVED DISTANCE OF ${distance[player.uniqueId]}")
-        Bukkit.getLogger().info("REWARD:  ${calculateReward(distance[player.uniqueId]!!)}")
         val reward = calculateReward(distance[player.uniqueId]!!)
         if (reward > 0.0) {
             player.damage(reward)
             player.playEffect(EntityEffect.HURT)
         } else if (reward < 0.0) {
-            val healAmount = reward * -1
-            val maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
-            player.health = min(player.health + healAmount, maxHealth)
+            val healAmount = (reward * -1).toInt()
+            player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, healAmount, 6))
         }
         distance[targets[0].uniqueId] = 0.0
     }
+
 
     private fun calculateReward(distance: Double): Double {
         val averageTime = SETTING_taskDelay.average()
