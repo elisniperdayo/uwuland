@@ -32,7 +32,6 @@ class Uwuland : JavaPlugin() {
         File("./worlds.txt").forEachLine { name -> WorldCreator(name).createWorld() }
         //Event listeners
         ProtectDBBlock(this)
-        //BINDS NEEDS TO BE STORED IN A DATABASE
 
 
         //PEKRS (manage perks inside EventManager)
@@ -43,18 +42,15 @@ class Uwuland : JavaPlugin() {
         Speedrunner()
         Naruto()
         Abductor()
+        Disorganized()
 
         // TODO ADD Speedrunner infinite glass, slowly refilling
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
 
-        // Disorganized: Shuffle inventory on open / on timer, keeps hotbar on death
         // Photosynthesis: Gain buffs / debuffs based on light level (reapply every second )
         // Magnet: Attract everything (less range / effect on players)
-        // Short fuse: explode every 30? seconds. Immune to explosion damage (dont destroy chests if possible)
-        // Phoenix: On death => slowly revive and burn area. Turn water into lava, lower max hp
-        // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
-        // FISH FEAR ME (blow up nearby fish)
 
+        // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
         SwapStick()
         BunnyJump()
