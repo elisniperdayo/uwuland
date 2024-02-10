@@ -79,8 +79,7 @@ object LootTables {
         Loot(Material.GOLDEN_CARROT, 1..8),
         Loot(Material.SCULK_SENSOR, 2..6),
         Loot(Material.CHAINMAIL_LEGGINGS, 1..1),
-
-        )
+    )
 
     val rare = arrayOf<Loot>(
         Loot(Material.ENDER_PEARL, 1..4),

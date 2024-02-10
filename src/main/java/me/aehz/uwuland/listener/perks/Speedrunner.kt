@@ -44,8 +44,7 @@ class Speedrunner() : PerkListener() {
         if (!isEnabled) return
         if (e.entity !is Player) return
         if (!hasPerk(e.entity)) return
-        e.isCancelled
-        e.foodLevel = 10
+        if (!e.isCancelled) e.foodLevel = 10
     }
 
     override fun task(targets: MutableList<LivingEntity>) {

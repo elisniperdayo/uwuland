@@ -33,7 +33,6 @@ class Uwuland : JavaPlugin() {
         //Event listeners
         ProtectDBBlock(this)
 
-
         //PEKRS (manage perks inside EventManager)
         NarutoSwap()
         Tesla()
@@ -43,15 +42,19 @@ class Uwuland : JavaPlugin() {
         Naruto()
         Abductor()
         Disorganized()
+        Photosynthesis()
 
         // TODO ADD Speedrunner infinite glass, slowly refilling
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
+        // TODO MAKE ABSORPTION NOT DESYNC (JUST REDUCE THE DAMAGE TAKEN BY THE AMOUNT OF GOLDEN HEARTS??)
 
-        // Photosynthesis: Gain buffs / debuffs based on light level (reapply every second )
         // Magnet: Attract everything (less range / effect on players)
+        // GROUP PERK!!! SIMON SAYS (Use events to set bools and check if true later)
 
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
+        // Rewind system (after admin panel. Just store every inventory and location once a minute)
+
         SwapStick()
         BunnyJump()
 

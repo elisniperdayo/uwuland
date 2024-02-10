@@ -17,14 +17,6 @@ class Disorganized() : PerkListener() {
     var SETTING_payoutChance = 4
     val nonHotbarRange = 9..35
 
-    var totalPayouts = 0
-    var common = 0
-    var uncommon = 0
-    var rare = 0
-    var extraRare = 0
-    var superExtraUltraRare = 0
-
-
     @EventHandler
     fun onDeath(e: PlayerDeathEvent) {
         if (!isEnabled) return
@@ -64,34 +56,24 @@ class Disorganized() : PerkListener() {
         if ((1..100).random() > SETTING_payoutChance) return null
         val tableRoll = (1..1000000).random()
 
-        totalPayouts++
-
-        if (totalPayouts % 100 == 0) Bukkit.getLogger()
-            .info("Total:$totalPayouts | C:$common | U:$uncommon | R:$rare | E:$extraRare | U:$superExtraUltraRare ")
-
         val loot = when {
             tableRoll > 300000 -> {
-                common++
                 LootTables.common.random()
             }
 
             tableRoll > 60000 -> {
-                uncommon++
                 LootTables.uncommon.random()
             }
 
             tableRoll > 9000 -> {
-                rare++
                 LootTables.rare.random()
             }
 
             tableRoll > 1 -> {
-                extraRare++
                 LootTables.extraRare.random()
             }
 
             else -> {
-                superExtraUltraRare++
                 return LootTables.ultraSuperExtraRare.random()
             }
         }
