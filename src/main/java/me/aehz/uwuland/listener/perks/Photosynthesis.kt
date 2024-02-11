@@ -20,9 +20,9 @@ class Photosynthesis() : PerkListener() {
     var SETTING_buffChance = 15
     var SETTING_buffDuration = 1200
 
-    val nightTimeRange = 13200..23000
+    private val nightTimeRange = 13200..23000
 
-    val buffs = arrayOf<PotionEffect>(
+    private val buffs = arrayOf<PotionEffect>(
         PotionEffect(PotionEffectType.SPEED, 0, 2, false, false, false),
         PotionEffect(PotionEffectType.FAST_DIGGING, 0, 3, false, false, false),
         PotionEffect(PotionEffectType.LUCK, 0, 2, false, false, false),

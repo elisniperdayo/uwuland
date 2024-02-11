@@ -6,6 +6,7 @@ import me.aehz.uwuland.listener.global_events.*
 import me.aehz.uwuland.listener.global_events.Beta
 import me.aehz.uwuland.listener.group_perks.BindDamage
 import me.aehz.uwuland.listener.group_perks.Shuffle
+import me.aehz.uwuland.listener.group_perks.SimonSays
 import me.aehz.uwuland.listener.perks.*
 import org.bukkit.WorldCreator
 import org.bukkit.plugin.java.JavaPlugin
@@ -61,6 +62,7 @@ class Uwuland : JavaPlugin() {
         //GROUP EVENTS
         Shuffle()
         BindDamage()
+        SimonSays()
 
         //GLOBAL EVENTS
         ExplosiveArrows()
