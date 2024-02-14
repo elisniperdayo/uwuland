@@ -29,13 +29,32 @@ class SimonSays() : GroupPerkListener() {
     // Stores whether player has performed the relevant action
     private val currentObjectiveStates = mutableMapOf<UUID, Boolean>()
 
+    private val debuffs = listOf(
+        PotionEffect(PotionEffectType.WITHER, 13 * 20, 1),
+        PotionEffect(PotionEffectType.POISON, 30 * 20, 0),
+        PotionEffect(PotionEffectType.SLOW, 90 * 20, 1),
+        PotionEffect(PotionEffectType.SLOW_DIGGING, 60 * 20, 0),
+        PotionEffect(PotionEffectType.HUNGER, 120 * 20, 1),
+        PotionEffect(PotionEffectType.DARKNESS, 30 * 20, 0),
+    )
+
+    private val buffs = listOf(
+        PotionEffect(PotionEffectType.SPEED, 130 * 20, 0),
+        PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60 * 20, 0),
+        PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90 * 20, 0),
+        PotionEffect(PotionEffectType.REGENERATION, 35 * 20, 0),
+        PotionEffect(PotionEffectType.ABSORPTION, 45 * 20, 1),
+        PotionEffect(PotionEffectType.NIGHT_VISION, 300 * 20, 1),
+    )
+
     override fun setup(owner: PerkOwner): Boolean {
         startTask(owner)
         return true
     }
 
     override fun task(targets: MutableList<LivingEntity>) {
-        if (SETTING_taskDelay.first < 200) throw Error("Can not set taskDelay of SimonSays below 200")
+        if (SETTING_taskDelay.first < 200 + SETTING_objectiveTime) throw Error("SimonSays TaskDelay can not be lower than 200 ticks + ObjectiveTime")
+
         targets.forEach {
             if (it !is Player) return
             it.sendTitle("", "NEW OBJECTIVE:", 10, 50, 10)
@@ -107,24 +126,6 @@ class SimonSays() : GroupPerkListener() {
             targetAmount >= SETTING_instaKillPlayerThreshold && failedPercentage >= SETTING_instaKillPercentage
 
         val instantKill = listOf(PotionEffect(PotionEffectType.HARM, 10, 10))
-
-        val debuffs = listOf(
-            PotionEffect(PotionEffectType.WITHER, 13 * 20, 1),
-            PotionEffect(PotionEffectType.POISON, 30 * 20, 0),
-            PotionEffect(PotionEffectType.SLOW, 90 * 20, 1),
-            PotionEffect(PotionEffectType.SLOW_DIGGING, 60 * 20, 0),
-            PotionEffect(PotionEffectType.HUNGER, 120 * 20, 1),
-            PotionEffect(PotionEffectType.DARKNESS, 30 * 20, 0),
-        )
-
-        val buffs = listOf(
-            PotionEffect(PotionEffectType.SPEED, 130 * 20, 0),
-            PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60 * 20, 0),
-            PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90 * 20, 0),
-            PotionEffect(PotionEffectType.REGENERATION, 35 * 20, 0),
-            PotionEffect(PotionEffectType.ABSORPTION, 45 * 20, 1),
-            PotionEffect(PotionEffectType.NIGHT_VISION, 300 * 20, 1),
-        )
 
         return when {
             isInstantKill -> instantKill

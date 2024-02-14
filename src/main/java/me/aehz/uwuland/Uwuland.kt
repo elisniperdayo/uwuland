@@ -44,13 +44,14 @@ class Uwuland : JavaPlugin() {
         Abductor()
         Disorganized()
         Photosynthesis()
+        Magnetism()
 
         // TODO ADD Speedrunner infinite glass, slowly refilling
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
         // TODO MAKE ABSORPTION NOT DESYNC (JUST REDUCE THE DAMAGE TAKEN BY THE AMOUNT OF GOLDEN HEARTS??)
+        // TODO SimonSays: ADD sneak, sprint
 
-        // Magnet: Attract everything (less range / effect on players)
-        // GROUP PERK!!! SIMON SAYS (Use events to set bools and check if true later)
+        // Leash: Bind entities together
 
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
