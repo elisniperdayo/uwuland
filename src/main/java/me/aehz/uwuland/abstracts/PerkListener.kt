@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
+import org.bukkit.scoreboard.Team
 import java.lang.Error
 
 abstract class PerkListener() : Listener {
@@ -77,6 +78,14 @@ abstract class PerkListener() : Listener {
         return perkOwners.find { it.targets.contains(entity.uniqueId) || it.groupAlias == "TEAM:$teamName" } != null
     }
 
+    fun hasPerkTeam(team: Team): Boolean {
+        return perkOwners.find { it.groupAlias == "TEAM:${team.name}" } != null
+    }
+
+    fun hasPerkByName(name: String): Boolean {
+        return perkOwners.find { it.getTargetsAsLivingEntities().any { it.name == name && it is Player } } != null
+    }
+
     fun handleCooldown(e: Entity): Boolean {
         if (this.SETTING_cooldown <= 0) {
             Bukkit.getLogger().info("Can not use handleCooldown with cooldown lower than 1. In $alias")
@@ -86,10 +95,6 @@ abstract class PerkListener() : Listener {
         if (owner.isOnCooldown(this.SETTING_cooldown)) return false
         owner.updateCooldown(this.SETTING_cooldown)
         return true
-    }
-
-    fun hasPerkByName(name: String): Boolean {
-        return perkOwners.find { it.getTargetsAsLivingEntities().any { it.name == name && it is Player } } != null
     }
 
     fun remove(groupAlias: String) {

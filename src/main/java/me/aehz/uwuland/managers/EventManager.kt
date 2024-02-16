@@ -3,6 +3,7 @@ package me.aehz.uwuland.managers
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.abstracts.PerkListener
 import org.bukkit.entity.Entity
+import org.bukkit.scoreboard.Team
 
 object EventManager {
     val listeners = mutableMapOf<String, PerkListener>()
@@ -25,5 +26,9 @@ object EventManager {
 
     fun getPerksByName(name: String): Collection<PerkListener> {
         return listeners.filter { it.value.hasPerkByName(name) }.values
+    }
+
+    fun getPerksByTeam(team: Team): Collection<PerkListener> {
+        return listeners.filter { it.value.hasPerkTeam(team) }.values
     }
 }
