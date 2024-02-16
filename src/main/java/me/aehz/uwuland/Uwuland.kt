@@ -1,5 +1,6 @@
 package me.aehz.uwuland
 
+import me.aehz.uwuland.API.KtorServer
 import me.aehz.uwuland.commands.*
 import me.aehz.uwuland.listener.*
 import me.aehz.uwuland.listener.global_events.*
@@ -27,6 +28,8 @@ class Uwuland : JavaPlugin() {
 
 
     override fun onEnable() {
+
+        KtorServer.start()
 
         PluginInstance.set(this)
 
@@ -56,6 +59,7 @@ class Uwuland : JavaPlugin() {
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
         // Rewind system (after admin panel. Just store every inventory and location once a minute)
+        // GUI: Display all attribute modifiers
 
         SwapStick()
         BunnyJump()
