@@ -20,8 +20,7 @@ object PlayerController {
             players.size,
             players
         )
-        val response = Gson().toJson(responseData)
-        call.respond(response)
+        call.respond(responseData)
     }
 
     private fun playerToPlayerData(player: Player): PlayerData {

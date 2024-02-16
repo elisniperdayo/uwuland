@@ -18,11 +18,8 @@ data class PerkOwner(
         if (type == PerkOwnerType.TEAM) {
             val teamName = groupAlias.substringAfter(":")
             return Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)?.entries?.mapNotNull {
-                Bukkit.getPlayer(
-                    it
-                )
-            }
-                ?.toMutableList() ?: mutableListOf()
+                Bukkit.getPlayer(it)
+            }?.toMutableList() ?: mutableListOf()
         }
         return targets.mapNotNull { Bukkit.getEntity(it) }.filterIsInstance<LivingEntity>().toMutableList()
     }
