@@ -1,9 +1,11 @@
 package me.aehz.uwuland.API.Controllers
 
+import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.managers.EventManager
 import net.kyori.adventure.text.Component
@@ -14,13 +16,19 @@ import org.bukkit.scoreboard.Team
 object TeamController {
     // Get all teams
     suspend fun get(call: ApplicationCall) {
-        val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map {
-            teamToTeamData(it)
+        call.respondTextWriter(ContentType.Text.EventStream, HttpStatusCode.OK) {
+            while (true) {
+                val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map {
+                    teamToTeamData(it)
+                }
+                val responseData = AllTeamsData(teams)
+
+                val json = Gson().toJson(responseData)
+                write("data: $json\n\n")
+                flush()
+                delay(1000)
+            }
         }
-        val responseData = AllTeamsData(
-            teams
-        )
-        call.respond(responseData)
     }
 
     // Add team

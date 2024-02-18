@@ -6,7 +6,6 @@ import me.aehz.uwuland.API.Controllers.PerkController
 
 fun Route.perks() {
     get("perks") {
-        //TODO: ADD CACHING
         PerkController.get(call)
     }
 

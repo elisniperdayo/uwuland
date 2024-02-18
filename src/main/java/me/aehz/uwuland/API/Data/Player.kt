@@ -5,7 +5,6 @@ import org.bukkit.potion.PotionEffect
 import java.util.UUID
 
 data class AllPlayersData(
-    val playerCount: Int,
     val players: List<PlayerData>,
 )
 

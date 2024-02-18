@@ -3,8 +3,11 @@ package me.aehz.uwuland.API.Data
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
-import org.bukkit.entity.LivingEntity
 import java.util.UUID
+
+data class AllPerksData(
+    val perks: List<ListenerData>
+)
 
 data class ListenerData(
     val name: String,

@@ -5,10 +5,8 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import me.aehz.uwuland.API.Data.ListenerData
-import me.aehz.uwuland.API.Data.PostOwnerData
-import me.aehz.uwuland.API.Data.SettingData
-import me.aehz.uwuland.API.Data.SettingDataType
+import kotlinx.coroutines.delay
+import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.abstracts.GroupPerkListener
 import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.enums.ListenerType
@@ -17,10 +15,20 @@ import me.aehz.uwuland.managers.EventManager
 
 object PerkController {
     suspend fun get(call: ApplicationCall) {
-        val perks = EventManager.listeners.values.map {
-            listenerToListenerData(it)
+
+        call.respondTextWriter(ContentType.Text.EventStream, HttpStatusCode.OK) {
+            while (true) {
+                val perks = EventManager.listeners.values.map {
+                    listenerToListenerData(it)
+                }
+                val responseData = AllPerksData(perks)
+
+                val json = Gson().toJson(responseData)
+                write("data: $json\n\n")
+                flush()
+                delay(1000)
+            }
         }
-        call.respond(perks)
     }
 
     suspend fun putSettings(call: ApplicationCall) {
