@@ -68,7 +68,7 @@ class GroupPerk(private val plugin: Uwuland) : CommandExecutor {
                 when (args[1]) {
                     "add" -> {
                         val groupAlias = targets.joinToString("&") { it.name }
-                        listener.add(groupAlias, targets.toMutableList())
+                        listener.add(groupAlias, targets.map { it.uniqueId }.toMutableList())
                     }
 
                     "remove" -> {

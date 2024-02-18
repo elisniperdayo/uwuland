@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.scoreboard.Team
 import java.lang.Error
+import java.util.UUID
 
 abstract class PerkListener() : Listener {
     val plugin = PluginInstance.get()!!
@@ -50,6 +51,7 @@ abstract class PerkListener() : Listener {
         val field = this::class.java.getDeclaredField("SETTING_${name}")
         if (!field.trySetAccessible()) return false
         val fieldValue = field.get(this)
+        Bukkit.getLogger().info("${value::class}")
         if (fieldValue::class != value::class) return false
         field.set(this, value)
         return true
@@ -63,11 +65,10 @@ abstract class PerkListener() : Listener {
         return
     }
 
-    fun add(groupAlias: String, targets: MutableList<LivingEntity>) {
-        val uniqueIdList = targets.map { it.uniqueId }.toMutableList()
-        val combinedUniqueIdString = uniqueIdList.sorted().toString()
+    fun add(groupAlias: String, targets: MutableList<UUID>) {
+        val combinedUniqueIdString = targets.sorted().toString()
         if (perkOwners.find { it.combinedUniqueIdString == combinedUniqueIdString } != null) return
-        val owner = PerkOwner(PerkOwnerType.PLAYER, groupAlias, uniqueIdList, combinedUniqueIdString)
+        val owner = PerkOwner(PerkOwnerType.PLAYER, groupAlias, targets, combinedUniqueIdString)
         val successfulSetup = setup(owner)
         if (!successfulSetup) return
         perkOwners.add(owner)

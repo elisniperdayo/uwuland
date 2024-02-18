@@ -54,7 +54,7 @@ class Perk(private val plugin: Uwuland) : CommandExecutor {
         if (listener.type != ListenerType.PERK) return false
 
         when (args[1]) {
-            "add" -> listener.add(p.name, mutableListOf(p))
+            "add" -> listener.add(p.name, mutableListOf(p.uniqueId))
             "remove" -> listener.remove(p.name)
             else -> return false
         }

@@ -53,6 +53,7 @@ class Uwuland : JavaPlugin() {
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
         // TODO MAKE ABSORPTION NOT DESYNC (JUST REDUCE THE DAMAGE TAKEN BY THE AMOUNT OF GOLDEN HEARTS??)
         // TODO SimonSays: ADD sneak, sprint
+        // TODO MOVE ALL CONVERSION FUNCTIONS INTO CONVERSTION UTIL
 
         // Leash: Bind entities together
 

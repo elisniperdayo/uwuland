@@ -1,7 +1,7 @@
 package me.aehz.uwuland.listener.perks
 
 import io.papermc.paper.event.player.PlayerArmSwingEvent
-import me.aehz.uwuland.abstracts.PerkListener
+import me.aehz.uwuland.abstracts.*
 import me.aehz.uwuland.util.swapEntities
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
@@ -12,6 +12,7 @@ class Abductor() : PerkListener() {
     var SETTING_maxRange = 42
     var SETTING_minRange = 4
     var SETTING_swapInventory = false
+
 
     @EventHandler
     fun onArmSwing(e: PlayerArmSwingEvent) {

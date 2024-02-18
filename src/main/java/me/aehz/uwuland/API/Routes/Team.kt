@@ -29,6 +29,4 @@ fun Route.teams() {
         call.caching = CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 86400, mustRevalidate = false))
         TeamController.getColor(call)
     }
-
-
 }
