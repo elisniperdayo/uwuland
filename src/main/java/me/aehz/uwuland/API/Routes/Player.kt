@@ -7,6 +7,6 @@ import me.aehz.uwuland.API.Controllers.PlayerController
 
 fun Route.players() {
     get("players/sse") {
-        PlayerController.get(call)
+        PlayerController.sse(call)
     }
 }

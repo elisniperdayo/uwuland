@@ -1,29 +1,19 @@
 package me.aehz.uwuland.API.Controllers
 
-import com.google.gson.Gson
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
+import me.aehz.uwuland.abstracts.SharedSseController
 import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.util.ApiUtil
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 
-object PlayerController {
-    suspend fun get(call: ApplicationCall) {
-        call.respondTextWriter(ContentType.Text.EventStream, HttpStatusCode.OK) {
-            while (true) {
-                val players = Bukkit.getServer().onlinePlayers.map {
-                    playerToPlayerData(it)
-                }
-                val responseData = AllPlayersData(players)
-                ApiUtil.asJsonSSE(this, 1000, responseData)
-            }
+object PlayerController : SharedSseController() {
+    override fun getSseData(): AllPlayersData {
+        val players = Bukkit.getServer().onlinePlayers.map {
+            playerToPlayerData(it)
         }
+        return AllPlayersData(players)
     }
 
     private fun playerToPlayerData(player: Player): PlayerData {

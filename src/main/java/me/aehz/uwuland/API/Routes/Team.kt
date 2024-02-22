@@ -10,7 +10,7 @@ import me.aehz.uwuland.API.Controllers.TeamController
 fun Route.teams() {
 
     get("teams/sse") {
-        TeamController.get(call)
+        TeamController.sse(call)
     }
 
     post("teams/{teamName}") {

@@ -1,31 +1,24 @@
 package me.aehz.uwuland.API.Controllers
 
-import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
+import me.aehz.uwuland.abstracts.SharedSseController
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.util.ApiUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.scoreboard.Team
 
-object TeamController {
-    // Get all teams
-    suspend fun get(call: ApplicationCall) {
-        call.respondTextWriter(ContentType.Text.EventStream, HttpStatusCode.OK) {
-            while (true) {
-                val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map {
-                    teamToTeamData(it)
-                }
-                val responseData = AllTeamsData(teams)
-                ApiUtil.asJsonSSE(this, 1000, responseData)
-            }
+object TeamController : SharedSseController() {
+
+    override fun getSseData(): AllTeamsData {
+        val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map {
+            teamToTeamData(it)
         }
+        return AllTeamsData(teams)
     }
 
     // Add team

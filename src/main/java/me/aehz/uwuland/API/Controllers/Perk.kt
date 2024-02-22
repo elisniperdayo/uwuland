@@ -1,7 +1,6 @@
 package me.aehz.uwuland.API.Controllers
 
 import com.google.gson.Gson
-import com.typesafe.config.ConfigException.Null
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -9,24 +8,18 @@ import io.ktor.server.response.*
 import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.abstracts.GroupPerkListener
 import me.aehz.uwuland.abstracts.PerkListener
+import me.aehz.uwuland.abstracts.SharedSseController
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.managers.EventManager
-import me.aehz.uwuland.util.ApiUtil
 
-object PerkController {
-    suspend fun get(call: ApplicationCall) {
+object PerkController : SharedSseController() {
 
-        call.respondTextWriter(ContentType.Text.EventStream, HttpStatusCode.OK) {
-            while (true) {
-                val perks = EventManager.listeners.values.map {
-                    listenerToListenerData(it)
-                }
-
-                val responseData = AllPerksData(perks)
-                ApiUtil.asJsonSSE(this, 1000, responseData)
-            }
+    override fun getSseData(): AllPerksData {
+        val perks = EventManager.listeners.values.map {
+            listenerToListenerData(it)
         }
+        return AllPerksData(perks)
     }
 
     suspend fun putSettings(call: ApplicationCall) {

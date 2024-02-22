@@ -6,7 +6,7 @@ import me.aehz.uwuland.API.Controllers.PerkController
 
 fun Route.perks() {
     get("perks/sse") {
-        PerkController.get(call)
+        PerkController.sse(call)
     }
 
     put("perks/{perk}/settings") {
