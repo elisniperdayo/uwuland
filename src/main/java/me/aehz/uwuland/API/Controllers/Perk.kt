@@ -1,17 +1,18 @@
 package me.aehz.uwuland.API.Controllers
 
 import com.google.gson.Gson
+import com.typesafe.config.ConfigException.Null
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.abstracts.GroupPerkListener
 import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.managers.EventManager
+import me.aehz.uwuland.util.ApiUtil
 
 object PerkController {
     suspend fun get(call: ApplicationCall) {
@@ -21,12 +22,9 @@ object PerkController {
                 val perks = EventManager.listeners.values.map {
                     listenerToListenerData(it)
                 }
-                val responseData = AllPerksData(perks)
 
-                val json = Gson().toJson(responseData)
-                write("data: $json\n\n")
-                flush()
-                delay(1000)
+                val responseData = AllPerksData(perks)
+                ApiUtil.asJsonSSE(this, 1000, responseData)
             }
         }
     }

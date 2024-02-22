@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.managers.EventManager
+import me.aehz.uwuland.util.ApiUtil
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -20,11 +21,7 @@ object PlayerController {
                     playerToPlayerData(it)
                 }
                 val responseData = AllPlayersData(players)
-
-                val json = Gson().toJson(responseData)
-                write("data: $json\n\n")
-                flush()
-                delay(1000)
+                ApiUtil.asJsonSSE(this, 1000, responseData)
             }
         }
     }

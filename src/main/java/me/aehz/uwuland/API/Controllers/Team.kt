@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.Data.*
 import me.aehz.uwuland.managers.EventManager
+import me.aehz.uwuland.util.ApiUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -22,11 +23,7 @@ object TeamController {
                     teamToTeamData(it)
                 }
                 val responseData = AllTeamsData(teams)
-
-                val json = Gson().toJson(responseData)
-                write("data: $json\n\n")
-                flush()
-                delay(1000)
+                ApiUtil.asJsonSSE(this, 1000, responseData)
             }
         }
     }
