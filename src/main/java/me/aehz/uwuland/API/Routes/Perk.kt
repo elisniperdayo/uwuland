@@ -5,7 +5,7 @@ import io.ktor.server.routing.*
 import me.aehz.uwuland.API.Controllers.PerkController
 
 fun Route.perks() {
-    get("perks") {
+    get("perks/sse") {
         PerkController.get(call)
     }
 

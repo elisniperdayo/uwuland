@@ -9,7 +9,7 @@ import me.aehz.uwuland.API.Controllers.TeamController
 
 fun Route.teams() {
 
-    get("teams") {
+    get("teams/sse") {
         TeamController.get(call)
     }
 
