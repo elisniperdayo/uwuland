@@ -12,17 +12,18 @@ import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.SseEvent
 import me.aehz.uwuland.API.respondSse
 import org.bukkit.Bukkit
+import java.time.Duration
 
 @OptIn(kotlinx.coroutines.ObsoleteCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 abstract class SharedSseController {
     var previousSseEvent: SseEvent? = null
     val scope = CoroutineScope(Dispatchers.Default)
+    open val delay = Duration.ofSeconds(1)
     private val channel = scope.produce {
         while (true) {
+            delay(delay.toMillis())
             val data = getSseData()
-            Bukkit.getLogger().info("SENDING")
             handleSend(this, data)
-            delay(1000)
         }
     }.broadcast()
 

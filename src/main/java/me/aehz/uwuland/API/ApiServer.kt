@@ -11,6 +11,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.delay
+import me.aehz.uwuland.API.Routes.events
 import me.aehz.uwuland.API.Routes.perks
 import me.aehz.uwuland.API.Routes.players
 import me.aehz.uwuland.API.Routes.teams
@@ -31,6 +32,7 @@ object KtorServer {
                 players()
                 teams()
                 perks()
+                events()
             }
         }.start()
         Bukkit.getLogger().info("STARTED SERVER")
