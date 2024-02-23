@@ -3,5 +3,8 @@ package me.aehz.uwuland.API.Data
 import org.bukkit.util.Vector
 
 data class ApiDataLocation(
-    val location: Vector
+    val x: Double,
+    val y: Double,
+    val z: Double,
+    val dimension: String,
 )

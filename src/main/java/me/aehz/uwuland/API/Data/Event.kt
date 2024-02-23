@@ -4,41 +4,41 @@ import me.aehz.uwuland.enums.ApiEventType
 import org.bukkit.util.Vector
 import java.util.UUID
 
-data class ApiEvent(
-    val type: ApiEventType,
-    val data: ApiEventData,
-    val timeStamp: Long = System.currentTimeMillis(),
-)
 
-sealed class ApiEventData {
+sealed class ApiDataEvent {
+    abstract val type: ApiEventType
+    val timeStamp: Long = System.currentTimeMillis()
+
     data class Damage(
-        val entity: ApiEventEntity,
+        override val type: ApiEventType,
+        val entity: ApiDataEntity,
         val amount: Number,
         val cause: String
-    ) : ApiEventData()
+    ) : ApiDataEvent()
 
     data class Pvp(
-        val entity: ApiEventEntity,
-        val damager: ApiEventEntity,
+        override val type: ApiEventType,
+        val entity: ApiDataEntity,
+        val damager: ApiDataEntity,
         val amount: Number,
         val cause: String,
-    ) : ApiEventData()
+    ) : ApiDataEvent()
 
     data class Death(
-        val entity: ApiEventEntity,
-    ) : ApiEventData()
+        override val type: ApiEventType,
+        val entity: ApiDataEntity,
+    ) : ApiDataEvent()
 
     data class JoinQuit(
-        val entity: ApiEventEntity,
+        override val type: ApiEventType,
+        val entity: ApiDataEntity,
         val ping: Int,
-    ) : ApiEventData()
+    ) : ApiDataEvent()
 
+    data class Portal(
+        override val type: ApiEventType,
+        val entity: ApiDataEntity,
+        val from: ApiDataLocation,
+        val to: ApiDataLocation,
+    ) : ApiDataEvent()
 }
-
-data class ApiEventEntity(
-    val id: UUID,
-    val name: String,
-    val location: Vector,
-    val entityHp: Long,
-    val level: Int,
-)

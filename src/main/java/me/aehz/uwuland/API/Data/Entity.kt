@@ -7,13 +7,11 @@ import java.util.*
 data class ApiDataEntity(
     val id: UUID,
     val name: String,
-    val location: ApiDataLocation,
     val level: Int,
     val health: Double,
     val perks: List<ApiDataListener>,
     val potionEffects: Collection<PotionEffect>,
     val attributes: List<ApiDataEntityAttributeData>,
-    val ping: Int,
 )
 
 data class ApiDataEntityAttributeData(

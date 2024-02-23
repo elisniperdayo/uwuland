@@ -17,9 +17,12 @@ import org.bukkit.scoreboard.Team
 object ApiDataConverter {
 
     //region COMMON
-    fun location(l: Location): ApiDataLocation {
+    fun location(loc: Location): ApiDataLocation {
         return ApiDataLocation(
-            l.toVector()
+            loc.x,
+            loc.y,
+            loc.z,
+            loc.world.environment.name
         )
     }
     //endregion
@@ -30,18 +33,15 @@ object ApiDataConverter {
         val level = if (e is Player) e.expToLevel else -1
         val activePotionEffects = if (e is LivingEntity) e.activePotionEffects else listOf<PotionEffect>()
         val attributes = if (e is LivingEntity) attributeList(e) else listOf<ApiDataEntityAttributeData>()
-        val ping = if (e is Player) e.ping else -1
 
         return ApiDataEntity(
             e.uniqueId,
             e.name,
-            location(e.location),
             level,
             health,
             appliedPerkListEntity(e),
             activePotionEffects,
             attributes,
-            ping
         )
     }
 
