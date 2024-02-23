@@ -1,31 +1,29 @@
 package me.aehz.uwuland.API.Controllers
 
-import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import me.aehz.uwuland.API.Data.*
+import me.aehz.uwuland.API.Data.ApiDataConverter
 import me.aehz.uwuland.abstracts.GroupPerkListener
-import me.aehz.uwuland.abstracts.PerkListener
 import me.aehz.uwuland.abstracts.SharedSseController
 import me.aehz.uwuland.enums.ListenerType
 import me.aehz.uwuland.enums.PerkOwnerType
 import me.aehz.uwuland.managers.EventManager
 
 object PerkController : SharedSseController() {
-
-    override fun getSseData(): AllPerksData {
+    override fun getSseData(): List<ApiDataListener> {
         val perks = EventManager.listeners.values.map {
-            listenerToListenerData(it)
+            ApiDataConverter.listener(it)
         }
-        return AllPerksData(perks)
+        return perks
     }
 
     suspend fun putSettings(call: ApplicationCall) {
-        val updateData = call.receive<SettingData>()
+        val updateData = call.receive<ApiDataPerkSetting>()
         val listener = EventManager.listeners.values.find { it.alias == call.parameters["perk"] }
-        val value = valueToSettingType(updateData.value, updateData.type)
+        val value = ApiDataConverter.convertValueToSettingType(updateData.value, updateData.type)
         if (listener == null) {
             call.respondText("Could not find perk", status = HttpStatusCode.NotFound)
             return
@@ -40,7 +38,7 @@ object PerkController : SharedSseController() {
     }
 
     suspend fun postOwner(call: ApplicationCall) {
-        val ownerData = call.receive<PostOwnerData>()
+        val ownerData = call.receive<ApiDataPostOwner>()
         val listener = EventManager.listeners.values.find { it.alias == call.parameters["perk"] }
 
         if (listener == null) {
@@ -78,46 +76,4 @@ object PerkController : SharedSseController() {
         call.respondText("Team deleted successfully", status = HttpStatusCode.NoContent)
     }
 
-    private fun listenerToListenerData(listener: PerkListener): ListenerData {
-        return ListenerData(
-            listener.alias,
-            listener.type,
-            listener.perkOwners,
-            listener.getSettings().map {
-                val field = listener::class.java.getDeclaredField("SETTING_${it}")
-                field.trySetAccessible()
-                val value = field.get(listener)
-                SettingData(it, value, getSettingTypeFromValue(value))
-            },
-        )
-    }
-
-    private fun getSettingTypeFromValue(value: Any): SettingDataType {
-        return when (value) {
-            is Int -> SettingDataType.INT
-            is Double -> SettingDataType.DOUBLE
-            is Long -> SettingDataType.LONG
-            is Float -> SettingDataType.FLOAT
-            is Boolean -> SettingDataType.BOOLEAN
-            is IntRange -> SettingDataType.INTRANGE
-            is String -> SettingDataType.STRING
-            else -> SettingDataType.NULL
-        }
-    }
-
-    private fun valueToSettingType(value: Any, type: SettingDataType): Any? {
-        return when {
-            value is Number && type == SettingDataType.INT -> value.toInt()
-            value is Number && type == SettingDataType.DOUBLE -> value.toDouble()
-            value is Number && type == SettingDataType.LONG -> value.toLong()
-            value is Number && type == SettingDataType.FLOAT -> value.toFloat()
-            value is Boolean -> value
-            value is String -> value
-            type == SettingDataType.INTRANGE -> {
-                Gson().fromJson(value.toString(), IntRange::class.java)
-            }
-
-            else -> null
-        }
-    }
 }

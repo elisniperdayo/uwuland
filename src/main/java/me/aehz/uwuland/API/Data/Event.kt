@@ -12,9 +12,33 @@ data class ApiEvent(
 
 sealed class ApiEventData {
     data class Damage(
-        val location: Vector,
-        val entity: UUID,
+        val entity: ApiEventEntity,
         val amount: Number,
         val cause: String
     ) : ApiEventData()
+
+    data class Pvp(
+        val entity: ApiEventEntity,
+        val damager: ApiEventEntity,
+        val amount: Number,
+        val cause: String,
+    ) : ApiEventData()
+
+    data class Death(
+        val entity: ApiEventEntity,
+    ) : ApiEventData()
+
+    data class JoinQuit(
+        val entity: ApiEventEntity,
+        val ping: Int,
+    ) : ApiEventData()
+
 }
+
+data class ApiEventEntity(
+    val id: UUID,
+    val name: String,
+    val location: Vector,
+    val entityHp: Long,
+    val level: Int,
+)

@@ -2,31 +2,23 @@ package me.aehz.uwuland.API.Data
 
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.potion.PotionEffect
-import java.util.UUID
+import java.util.*
 
-data class AllPlayersData(
-    val players: List<PlayerData>,
-)
-
-data class PlayerData(
+data class ApiDataEntity(
     val id: UUID,
     val name: String,
+    val location: ApiDataLocation,
     val level: Int,
     val health: Double,
-    val perks: List<PlayerPerkData>,
+    val perks: List<ApiDataListener>,
     val potionEffects: Collection<PotionEffect>,
-    val attributes: Any
+    val attributes: List<ApiDataEntityAttributeData>,
+    val ping: Int,
 )
 
-data class PlayerAttributeData(
+data class ApiDataEntityAttributeData(
     val name: String,
     val baseValue: Double?,
     val value: Double?,
     val modifiers: Collection<AttributeModifier>
-)
-
-data class PlayerPerkData(
-    val name: String,
-    val isEnabled: Boolean,
-    val partners: Any
 )

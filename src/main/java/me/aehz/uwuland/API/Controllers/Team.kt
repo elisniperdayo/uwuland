@@ -5,8 +5,8 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import me.aehz.uwuland.API.Data.*
+import me.aehz.uwuland.API.Data.ApiDataConverter
 import me.aehz.uwuland.abstracts.SharedSseController
-import me.aehz.uwuland.managers.EventManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -14,16 +14,16 @@ import org.bukkit.scoreboard.Team
 
 object TeamController : SharedSseController() {
 
-    override fun getSseData(): AllTeamsData {
+    override fun getSseData(): List<ApiDataTeam> {
         val teams = Bukkit.getScoreboardManager().mainScoreboard.teams.map {
-            teamToTeamData(it)
+            ApiDataConverter.team(it)
         }
-        return AllTeamsData(teams)
+        return teams
     }
 
     // Add team
     suspend fun post(call: ApplicationCall) {
-        val teamData = call.receive<TeamUpdateData>()
+        val teamData = call.receive<UpdateTeamData>()
         val team = Bukkit.getScoreboardManager().mainScoreboard.registerNewTeam(call.parameters["teamName"]!!)
 
         updateTeam(team, teamData)
@@ -33,7 +33,7 @@ object TeamController : SharedSseController() {
 
     // Edit team
     suspend fun put(call: ApplicationCall) {
-        val teamData = call.receive<TeamUpdateData>()
+        val teamData = call.receive<UpdateTeamData>()
         val team = Bukkit.getScoreboardManager().mainScoreboard.getTeam(call.parameters["teamName"]!!)
         if (team == null) {
             call.respondText("Team not found", status = HttpStatusCode.NotFound)
@@ -57,22 +57,7 @@ object TeamController : SharedSseController() {
         call.respond(NamedTextColor.NAMES)
     }
 
-    private fun teamToTeamData(team: Team): TeamData {
-        return TeamData(
-            team.name,
-            team.prefix().toString(),
-            team.color(),
-            team.entries,
-            EventManager.getPerksByTeam(team).map {
-                TeamPerkData(
-                    it.alias,
-                    it.isEnabled
-                )
-            }
-        )
-    }
-
-    private fun updateTeam(team: Team, teamData: TeamUpdateData) {
+    private fun updateTeam(team: Team, teamData: UpdateTeamData) {
 
         if (teamData.prefix != null) {
             team.prefix(Component.text("[${teamData.prefix}] "))
