@@ -1,5 +1,6 @@
 package me.aehz.uwuland
 
+import me.aehz.uwuland.API.ApiEventListener
 import me.aehz.uwuland.API.KtorServer
 import me.aehz.uwuland.commands.*
 import me.aehz.uwuland.listener.*
@@ -26,12 +27,10 @@ object PluginInstance {
 
 class Uwuland : JavaPlugin() {
 
-
     override fun onEnable() {
-
         KtorServer.start()
-
         PluginInstance.set(this)
+        ApiEventListener()
 
         File("./worlds.txt").forEachLine { name -> WorldCreator(name).createWorld() }
         //Event listeners
@@ -53,10 +52,14 @@ class Uwuland : JavaPlugin() {
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
         // TODO MAKE ABSORPTION NOT DESYNC (JUST REDUCE THE DAMAGE TAKEN BY THE AMOUNT OF GOLDEN HEARTS??)
         // TODO SimonSays: ADD sneak, sprint
-        // TODO MOVE ALL CONVERSION FUNCTIONS INTO CONVERSTION UTIL
+        // TODO MOVE ALL API CONVERSION FUNCTIONS INTO CONVERSTION UTIL
+        // TODO API EVENTS
+        // TODO NEARBY PLAYERS IN API
+
 
         // Leash: Bind entities together
 
+        // Invis when sneaking for x seconds, glowing when standing
         // Bunny: Takes damage when alone. Implement BunnyJump. (No fall damage?) DONT LET ENDERDRAGON BE BUNNIFIED
         // ShortSighted: PLAYER ONLY Unable to see Entities outside a 4 block radius. Unable to be seen by other Entities outside a 4 block radius
         // Rewind system (after admin panel. Just store every inventory and location once a minute)
