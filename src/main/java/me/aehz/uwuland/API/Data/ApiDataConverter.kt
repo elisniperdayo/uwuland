@@ -8,6 +8,7 @@ import me.aehz.uwuland.managers.EventManager
 import net.kyori.adventure.text.TextComponent
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -16,7 +17,7 @@ import org.bukkit.scoreboard.Team
 
 object ApiDataConverter {
 
-    //region COMMON
+    //region MISC
     fun location(loc: Location): ApiDataLocation {
         return ApiDataLocation(
             loc.x,
@@ -24,6 +25,10 @@ object ApiDataConverter {
             loc.z,
             loc.world.environment.name
         )
+    }
+
+    fun enchantsToAddToEnchantmentList(map: Map<Enchantment, Int>): List<ApiDataEnchantment> {
+        return map.map { ApiDataEnchantment(it.key.key.key, it.value) }
     }
     //endregion
 

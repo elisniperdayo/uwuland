@@ -11,7 +11,6 @@ import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.delay
 import me.aehz.uwuland.API.SseEvent
 import me.aehz.uwuland.API.respondSse
-import org.bukkit.Bukkit
 import java.time.Duration
 
 @OptIn(kotlinx.coroutines.ObsoleteCoroutinesApi::class, ExperimentalCoroutinesApi::class)

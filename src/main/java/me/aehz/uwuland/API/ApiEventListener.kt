@@ -13,6 +13,7 @@ import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
@@ -36,7 +37,6 @@ class ApiEventListener : Listener {
         if (e.entity !is Player && !isTamed) return
 
         val data = ApiDataEvent.Damage(
-            ApiEventType.DAMAGE,
             ApiDataConverter.entity(e.entity),
             e.finalDamage,
             e.cause.name
@@ -48,8 +48,6 @@ class ApiEventListener : Listener {
     fun onEntityDamage(e: EntityDamageByEntityEvent) {
         if (e.entity !is Player || e.damager !is Player) return
         val data = ApiDataEvent.Pvp(
-            ApiEventType.DAMAGE,
-
             ApiDataConverter.entity(e.entity),
             ApiDataConverter.entity(e.damager),
             e.finalDamage,
@@ -63,8 +61,6 @@ class ApiEventListener : Listener {
         val isTamed = e.entity is Tameable && (e.entity as Tameable).isTamed
         if (e.entity !is Player && !isTamed) return
         val data = ApiDataEvent.Death(
-            ApiEventType.DAMAGE,
-
             ApiDataConverter.entity(e.entity),
         )
         ApiEventManager.add(data)
@@ -72,8 +68,7 @@ class ApiEventListener : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onJoin(e: PlayerJoinEvent) {
-        val data = ApiDataEvent.JoinQuit(
-            ApiEventType.DAMAGE,
+        val data = ApiDataEvent.Join(
             ApiDataConverter.entity(e.player),
             e.player.ping
         )
@@ -82,21 +77,30 @@ class ApiEventListener : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onQuit(e: PlayerQuitEvent) {
-        val data = ApiDataEvent.JoinQuit(
-            ApiEventType.DAMAGE,
+        val data = ApiDataEvent.Quit(
             ApiDataConverter.entity(e.player),
             e.player.ping
         )
         ApiEventManager.add(data)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPortal(e: PlayerPortalEvent) {
         val data = ApiDataEvent.Portal(
-            ApiEventType.PORTAL,
             ApiDataConverter.entity(e.player),
             ApiDataConverter.location(e.from),
             ApiDataConverter.location(e.to)
+        )
+        ApiEventManager.add(data)
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onEnchant(e: EnchantItemEvent) {
+        e.enchantsToAdd.map { it.key.displayName(1) }
+        val data = ApiDataEvent.Enchant(
+            ApiDataConverter.entity(e.enchanter),
+            ApiDataConverter.enchantsToAddToEnchantmentList(e.enchantsToAdd),
+            e.item.type.name,
         )
         ApiEventManager.add(data)
     }
