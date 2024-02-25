@@ -1,8 +1,13 @@
 package me.aehz.uwuland.listener.perks
 
+import me.aehz.uwuland.API.Data.ApiDataConverter
+import me.aehz.uwuland.API.Data.ApiDataEvent
 import me.aehz.uwuland.abstracts.PerkListener
+import me.aehz.uwuland.data.Loot
 import me.aehz.uwuland.data.LootTables
 import me.aehz.uwuland.data.PerkOwner
+import me.aehz.uwuland.enums.ApiEventType
+import me.aehz.uwuland.managers.ApiEventManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -52,11 +57,11 @@ class Disorganized() : PerkListener() {
         player.inventory.contents = combinedContents.toTypedArray()
     }
 
-    private fun calculatePayout(): ItemStack? {
+    private fun calculatePayout(): Loot? {
         if ((1..100).random() > SETTING_payoutChance) return null
         val tableRoll = (1..1000000).random()
 
-        val loot = when {
+        return when {
             tableRoll > 300000 -> {
                 LootTables.common.random()
             }
@@ -74,18 +79,37 @@ class Disorganized() : PerkListener() {
             }
 
             else -> {
-                return LootTables.ultraSuperExtraRare.random()
+                LootTables.ultraSuperExtraRare.random()
             }
         }
-        return ItemStack(loot.material, loot.amount.random())
     }
 
     private fun handlePayout(player: Player) {
-        val payout = calculatePayout()
-        if (payout != null) {
-            val slot = player.inventory.firstEmpty()
-            if (slot == -1) player.world.dropItemNaturally(player.location, payout)
-            else player.inventory.setItem(slot, payout)
+        val payout = calculatePayout() ?: return
+        val item = LootTables.lootToItemStack(payout)
+        val slot = player.inventory.firstEmpty()
+        if (slot == -1) player.world.dropItemNaturally(player.location, item)
+        else player.inventory.setItem(slot, item)
+        handlePayoutApiEvent(player, payout, item)
+
+    }
+
+    private fun handlePayoutApiEvent(player: Player, payout: Loot, item: ItemStack) {
+
+        val type = when {
+            LootTables.common.contains(payout) -> ApiEventType.DISORGANIZED_COMMON
+            LootTables.uncommon.contains(payout) -> ApiEventType.DISORGANIZED_UNCOMMON
+            LootTables.rare.contains(payout) -> ApiEventType.DISORGANIZED_RARE
+            LootTables.extraRare.contains(payout) -> ApiEventType.DISORGANIZED_SUPER_RARE
+            LootTables.ultraSuperExtraRare.contains(payout) -> ApiEventType.DISORGANIZED_ONE_IN_A_MILLION
+            else -> return
         }
+
+        val data = ApiDataEvent.Perk.Disorganized(
+            ApiDataConverter.entity(player),
+            ApiDataConverter.itemStack(item),
+            type,
+        )
+        ApiEventManager.add(data)
     }
 }

@@ -1,8 +1,11 @@
 package me.aehz.uwuland.listener.group_perks
 
+import me.aehz.uwuland.API.Data.ApiDataConverter
+import me.aehz.uwuland.API.Data.ApiDataEvent
 import me.aehz.uwuland.Uwuland
 import me.aehz.uwuland.data.PerkOwner
 import me.aehz.uwuland.abstracts.GroupPerkListener
+import me.aehz.uwuland.managers.ApiEventManager
 import me.aehz.uwuland.managers.EventManager
 import me.aehz.uwuland.util.swapEntities
 import org.bukkit.Bukkit
@@ -19,6 +22,9 @@ class Shuffle() : GroupPerkListener() {
     }
 
     override fun task(targets: MutableList<LivingEntity>) {
+        val apiEntities = targets.map { ApiDataConverter.entity(it) }
+        val data = ApiDataEvent.Perk.Shuffle(apiEntities)
+        ApiEventManager.add(data)
         shuffleList(targets)
     }
 

@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.scoreboard.Team
 
@@ -27,7 +28,15 @@ object ApiDataConverter {
         )
     }
 
-    fun enchantsToAddToEnchantmentList(map: Map<Enchantment, Int>): List<ApiDataEnchantment> {
+    fun itemStack(itemStack: ItemStack): ApiDataItemStack {
+        return ApiDataItemStack(
+            itemStack.type.name,
+            itemStack.amount,
+            enchantmentMapToList(itemStack.enchantments)
+        )
+    }
+
+    fun enchantmentMapToList(map: Map<Enchantment, Int>): List<ApiDataEnchantment> {
         return map.map { ApiDataEnchantment(it.key.key.key, it.value) }
     }
     //endregion

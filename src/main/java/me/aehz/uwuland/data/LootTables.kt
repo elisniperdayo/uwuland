@@ -5,17 +5,24 @@ import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
 
-data class Loot(val material: Material, val amount: IntRange)
+data class Loot(
+    val material: Material,
+    val amount: IntRange,
+    val diplayName: String? = null,
+    val enchants: Map<Enchantment, Int>? = null
+)
 
 object LootTables {
 
-    private val rose = ItemStack(Material.WITHER_ROSE, 1)
-
-    init {
-        rose.addUnsafeEnchantment(Enchantment.KNOCKBACK, 5)
-        val roseMeta = rose.itemMeta
-        roseMeta.displayName(Component.text("One in a million"))
-        rose.itemMeta = roseMeta
+    fun lootToItemStack(loot: Loot): ItemStack {
+        val item = ItemStack(loot.material, loot.amount.random())
+        if (loot.diplayName != null) item.itemMeta.displayName(Component.text(loot.diplayName))
+        if (loot.enchants != null) {
+            loot.enchants.forEach { (enchant, level) ->
+                item.addUnsafeEnchantment(enchant, level)
+            }
+        }
+        return item
     }
 
     val common = arrayOf<Loot>(
@@ -92,10 +99,10 @@ object LootTables {
         Loot(Material.SHULKER_BOX, 1..1),
         Loot(Material.DIAMOND_BLOCK, 1..3),
         Loot(Material.ENCHANTING_TABLE, 1..1),
-        Loot(Material.BEDROCK, 1..1),
     )
 
     val extraRare = arrayOf<Loot>(
+        Loot(Material.BEDROCK, 1..3),
         Loot(Material.ENCHANTED_GOLDEN_APPLE, 1..1),
         Loot(Material.ELYTRA, 1..1),
         Loot(Material.NETHERITE_CHESTPLATE, 1..1),
@@ -103,7 +110,12 @@ object LootTables {
         Loot(Material.END_CRYSTAL, 2..2),
     )
 
-    val ultraSuperExtraRare = arrayOf<ItemStack>(
-        rose
+    val ultraSuperExtraRare = arrayOf<Loot>(
+        Loot(
+            Material.WITHER_ROSE,
+            1..1,
+            "One in a million",
+            mapOf(Pair(Enchantment.KNOCKBACK, 5))
+        )
     )
 }

@@ -50,11 +50,9 @@ class Uwuland : JavaPlugin() {
 
         // TODO ADD Speedrunner infinite glass, slowly refilling
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
-        // TODO MAKE ABSORPTION NOT DESYNC (JUST REDUCE THE DAMAGE TAKEN BY THE AMOUNT OF GOLDEN HEARTS??)
         // TODO SimonSays: ADD sneak, sprint
-        // TODO MOVE ALL API CONVERSION FUNCTIONS INTO CONVERSTION UTIL
-        // TODO API EVENTS
         // TODO NEARBY PLAYERS IN API
+        // TODO RESTART SAFELY
 
 
         // Leash: Bind entities together

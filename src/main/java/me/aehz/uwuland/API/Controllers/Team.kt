@@ -54,7 +54,7 @@ object TeamController : SharedSseController() {
 
     // Get all colors
     suspend fun getColor(call: ApplicationCall) {
-        call.respond(NamedTextColor.NAMES)
+        call.respond(NamedTextColor.NAMES.keyToValue())
     }
 
     private fun updateTeam(team: Team, teamData: UpdateTeamData) {

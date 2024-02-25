@@ -6,6 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.routing.*
 import me.aehz.uwuland.API.Controllers.TeamController
+import org.bukkit.Bukkit
 
 fun Route.teams() {
 

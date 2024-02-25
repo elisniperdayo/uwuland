@@ -1,12 +1,24 @@
 package me.aehz.uwuland.enums
 
-enum class ApiEventType(val color: Int) {
-    DEATH(0xFF000),
-    PVP(0xFF000),
-    DAMAGE(0xFF000),
-    ENCHANT(0xFF000),
-    ENDER_EYE(0xFF000),
-    JOIN(0xFF000),
-    QUIT(0xFF000),
-    PORTAL(0xFF000),
+enum class ApiEventType() {
+    DEATH,
+    PVP,
+    DAMAGE,
+    ENCHANT,
+    ENDER_EYE,
+    JOIN,
+    QUIT,
+    PORTAL,
+
+    //PERK EVENTS
+    SHUFFLE,
+    DISORGANIZED_COMMON,
+    DISORGANIZED_UNCOMMON,
+    DISORGANIZED_RARE,
+    DISORGANIZED_SUPER_RARE,
+    DISORGANIZED_ONE_IN_A_MILLION,
+}
+
+enum class ApiEventOrigin() {
+    MINECRAFT, PERK
 }

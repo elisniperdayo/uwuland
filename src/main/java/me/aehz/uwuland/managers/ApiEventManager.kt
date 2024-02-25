@@ -11,11 +11,11 @@ object ApiEventManager {
     val maxSize = 5
 
     fun add(e: ApiDataEvent) {
-        if (!events.containsKey(e.type)) {
+        if (!events.containsKey(e.eventType)) {
             val q = EvictingQueue.create<ApiDataEvent>(maxSize)
             val syncQ = Queues.synchronizedQueue(q)
-            events[e.type] = syncQ
+            events[e.eventType] = syncQ
         }
-        events[e.type]!!.add(e)
+        events[e.eventType]!!.add(e)
     }
 }
