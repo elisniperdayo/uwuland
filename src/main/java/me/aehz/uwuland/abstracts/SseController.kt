@@ -44,6 +44,10 @@ abstract class SharedSseController {
 
     suspend fun sse(call: ApplicationCall) {
         val sub = channel.openSubscription()
-        call.respondSse(sub, previousSseEvent)
+        try {
+            call.respondSse(sub, previousSseEvent)
+        } finally {
+            sub.cancel()
+        }
     }
 }

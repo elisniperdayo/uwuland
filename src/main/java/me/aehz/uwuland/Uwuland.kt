@@ -48,10 +48,12 @@ class Uwuland : JavaPlugin() {
         Photosynthesis()
         Magnetism()
 
+        // TODO DEATH EVENT LOCATION
+        // TODO REWORK TASKS TO ALLOW FOR MULTIPLE PER PERK. (REQUIRES TASK CLASS)
         // TODO ADD Speedrunner infinite glass, slowly refilling
         // TODO MAKE RandomFallDamage a solo perk. Also make it able to heal
         // TODO SimonSays: ADD sneak, sprint
-        // TODO NEARBY PLAYERS IN API
+        // TODO CLOSEST PLAYERS
         // TODO RESTART SAFELY
 
 

@@ -57,10 +57,12 @@ abstract class PerkListener() : Listener {
         return true
     }
 
+    // Run when adding perk to an entity
     open fun setup(owner: PerkOwner): Boolean {
         return true
     }
 
+    // Run when removing perk to an entity
     open fun unsetup(owner: PerkOwner) {
         return
     }
